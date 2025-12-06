@@ -71,13 +71,13 @@ menu[commands[i].category] += `.${commands[i].pattern}\n`;
 }
 
 let madeMenu = `
-👋 𝐇𝐄𝐋𝐋𝐎, ${pushname}!
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 𝚃𝙷𝙴𝚁𝙴, ${pushname}
 
-𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗤𝗨𝗘𝗘𝗡 𝗠𝗔𝗬𝗔 〽️𝗗  
+_𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗤𝗨𝗘𝗘𝗡 𝗠𝗔𝗬𝗔 〽️𝗗_  
 ╭─「 ᴄᴏᴍᴍᴀɴᴅꜱ ᴘᴀɴᴇʟ」
-│◈ *Up time* - * ${runtime(process.uptime())}
+│◈ *Up time - ${runtime(process.uptime())}*
 │◈ *Bot Owner - Sandes isuranda 
-│◈ *Owner number* - * 94716717099*  
+│◈ *Owner number* - 94716717099 
 │◈ *Mode - Public*
 │◈ *Group - Working*
 │◈ *System - 95.9*
@@ -88,6 +88,7 @@ let madeMenu = `
 │ .tiktok ( Download Tik Tok videos )
 │ .mp43 ( Download YouTube Videos )
 │ .song3 (Download YouTube Songs )
+│ .mediafire ( Download mediafire files )
 │
 │◈     👤 *Owner Menu*
 │ 
@@ -101,11 +102,20 @@ let madeMenu = `
 │ 
 │ .ping (Check bot response speed)
 │ .menu (Check Available Cmd)
-│ 
+│ .system ( Bot informations) 
 │◈     🔍 *Search Menu*
 │ 
 │ .yts (Search YouTube )
 │ .tiktoksearch (Tik Tok Search)
+│
+│◈ 👥 *Group Menu*
+│
+│ .add ( Add a person )
+│ .kick ( Remove a pereson )
+│ .mute ( Mute the group )
+│ .unmute ( Unmute the group )
+│ .tagall ( Tag every one ) 
+│
 ╰───────────●●►
 
 
