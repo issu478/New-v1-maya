@@ -5,7 +5,7 @@ function convertToBool(text, fault = 'true') {
     return text === fault ? true : false;
 }
 module.exports = {
-SESSION_ID: process.env.SESSION_ID || "iRNhHSLS#ROQEvvljwOUAG75EGcTW_aLr4c1fl6nbV8Sx1bdDotQ",
+SESSION_ID: process.env.SESSION_ID || "CEkB0YyT#FFF8YEz4NY8AnIzlNU0r-eflGf0yoD9VsDvGj3dO2RQ",
 ALIVE_IMG : process.env.ALIVE_IMG || "https://files.catbox.moe/4bc81k.png",
 ALIVE_MSG : process.env.ALIVE_MSG || "👋 *Hello ${pushname}! \n I'm alive now 😼 \n Pleace type .menu to see full cammand list . \n © QUEEN-MAYA-MD Is a third party program to improve Your WhatsApp expireance fun and useful.\n 😼 I was created by Sandes isuranda . A talented developer with different inovations . \n QUEEN-MAYA-MD 2025 ♠ All rights ricived ♠ \n > Powered by Sndes isuranda ツ",
 AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "true",
