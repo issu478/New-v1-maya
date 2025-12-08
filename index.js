@@ -150,7 +150,7 @@ conn.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
          
 if(senderNumber.includes("94716717099")){
 if(isReact) return
-m.react("👾")
+m.react("👨‍💻")
 }       
 
                
