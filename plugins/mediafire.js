@@ -1,4 +1,3 @@
-// file: mediafire.js
 const { cmd } = require('../command');
 const fetch = require('node-fetch');
 
@@ -6,7 +5,7 @@ cmd({
   pattern: "mediafire",
   alias: ["mf", "mfire"],
   desc: "Download files from MediaFire link",
-  react: "📚",
+  react: "📥",
   category: "download",
   filename: __filename
 },
@@ -17,21 +16,22 @@ async (conn, mek, m, { from, reply, args }) => {
     }
 
     let url = args[0];
-
+    
     // API Call
-    const api = `https://danuz-mediafire-api.vercel.app/api/mediafire?url=${url}`;
-
+    const api = `https://danuz-mediafire-api.vercel.app/api/mediafire?url=${encodeURIComponent(url)}`;
     const res = await fetch(api);
     const json = await res.json();
 
-    if (!json.urlDownload) {
-      return reply("Failed to get download link ❌");
+    // Check if API response is successful
+    if (!json.status || !json.urlDownload) {
+      return reply("❌ Failed to get download link! Please check the MediaFire URL.");
     }
 
     const fileUrl = json.urlDownload;
-    const fileName = json.filename || "mediafire_file";
+    const fileName = json.fileName || "mediafire_file"; // Fixed: was 'filename', should be 'fileName'
+    const fileSize = json.fileSize || "Unknown size";
 
-    reply(`📥 *Downloading...*\n📄 File: ${fileName}\n\n> Powered by Sandes Isuranda `);
+    await reply(`📥 *Downloading...*\n\n📄 *File:* ${fileName}\n📦 *Size:* ${fileSize}`);
 
     // Send file
     await conn.sendMessage(from, { 
@@ -40,8 +40,10 @@ async (conn, mek, m, { from, reply, args }) => {
       fileName: fileName
     }, { quoted: mek });
 
+    await reply("✅ Download complete!");
+
   } catch (e) {
     console.log(e);
-    reply("❌ Error while downloading!");
+    reply(`❌ Error while downloading!\n\n${e.message}`);
   }
 });
