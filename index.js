@@ -69,9 +69,9 @@ require("./plugins/" + plugin);
 console.log('Plugins installed successful ✅')
 console.log('Bot connected to whatsapp ✅')
 
-let up = `	QUEEN-MAYA-MD connected successful \nPREFIX: ${prefix}\n 👉 VERSION - 1.00\n 👉 OWNER - Sandes Isuranda\n 👉 MODE - STILL DEVLOPING \n *QUEEN-MAYA-〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU .`;
+let up = `*QUEEN-MAYA-MD connected successful ✅*\n\n• *PREFIX:* [ ${prefix} ]\n\n* ⚜️ VERSION* - 1.00\n\n *⚜️OWNER* - SANDES\n\n *⚜️ MODE* - STILL DEVLOPING`;
 
-conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
+conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://files.catbox.moe/4bc81k.png` }, caption: up })
 
 }
 })
@@ -147,12 +147,12 @@ conn.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
             }
             
 //========OwnerReact========            
-         
-if(senderNumber.includes("94716717099")){
-if(isReact) return
-m.react("👨‍💻")
-}       
 
+if (
+  senderNumber.includes("94716717099")) {
+  if (isReact) return
+  m.react("👨‍💻")
+}
                
 const events = require('./command')
 const cmdName = isCmd ? body.slice(1).trim().split(" ")[0].toLowerCase() : false;
@@ -193,4 +193,4 @@ res.send("hey, bot started✅");
 app.listen(port, () => console.log(`Server listening on port http://localhost:${port}`));
 setTimeout(() => {
 connectToWA()
-}, 4000);  
+}, 4000);
