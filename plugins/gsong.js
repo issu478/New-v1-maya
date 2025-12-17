@@ -3,6 +3,8 @@ const yts = require('yt-search')
 const axios = require('axios')
 const fetch = require('node-fetch')
 
+const API_KEY = 'd7d14f1bba24e3b13fb93227ed49cfba0dcbc1305e09e43387195015e4111d07'
+
 cmd({
     pattern: 'gsong',
     desc: 'Auto send song to group as document with details',
@@ -35,12 +37,12 @@ Usage:
         // requester
         const requester = mek.key.participant || mek.key.remoteJid
 
-        // group jid
+        // get group jid
         const inviteCode = groupLink.split('chat.whatsapp.com/')[1]
         const groupInfo = await conn.groupGetInviteInfo(inviteCode)
         const groupJid = groupInfo.id
 
-        // search song
+        // search song using yt-search
         const search = await yts(songName)
         if (!search.videos.length) {
             return reply('❌ Song not found!')
@@ -50,11 +52,11 @@ Usage:
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // NEW API (YouTube → MP3)
-        const res = await fetch(
-            `https://sadaslk-apis.vercel.app/api/v1/download/youtube?q=${video.url}&format=mp3&apiKey=55d63a64ef4f1b7a1fffeb551054e768`
-        )
+        // NEW YT API (MP3)
+        const apiUrl =
+`https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/ytapi?apiKey=${API_KEY}&url=${encodeURIComponent(video.url)}&fo=mp3&qu=128`
 
+        const res = await fetch(apiUrl)
         const json = await res.json()
 
         if (!json || !json.result || !json.result.download) {
@@ -79,7 +81,7 @@ Usage:
 
 > © Powered by Sandes Isuranda`
 
-        // send document to group
+        // send MP3 as DOCUMENT
         await conn.sendMessage(
             groupJid,
             {
