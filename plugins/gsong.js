@@ -6,7 +6,7 @@ const fetch = require('node-fetch')
 cmd({
     pattern: 'gsong',
     desc: 'Auto send song to group as document with details',
-    react: '🎧', 
+    react: '🎧',
     category: 'download',
     filename: __filename
 },
@@ -50,13 +50,14 @@ Usage:
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // get mp3
+        // NEW API (YouTube → MP3)
         const res = await fetch(
-            `http://vpn.asitha.top:3000/api/ytmp3?url=${video.url}`
+            `https://sadaslk-apis.vercel.app/api/v1/download/youtube?q=${video.url}&format=mp3&apiKey=55d63a64ef4f1b7a1fffeb551054e768`
         )
+
         const json = await res.json()
 
-        if (!json.result || !json.result.download) {
+        if (!json || !json.result || !json.result.download) {
             return reply('❌ Download failed!')
         }
 
@@ -84,14 +85,14 @@ Usage:
             {
                 document: { url: downloadUrl },
                 mimetype: 'audio/mpeg',
-                fileName: video.title + '.mp3',
+                fileName: `${video.title}.mp3`,
                 jpegThumbnail: thumbBuffer,
                 caption: caption,
                 mentions: [requester]
             }
         )
 
-        await reply('*Song uploaded to group successfully!* ')
+        await reply('✅ *Song uploaded to group successfully!*')
 
     } catch (e) {
         console.error(e)
