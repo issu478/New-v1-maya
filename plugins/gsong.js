@@ -42,9 +42,9 @@ Usage:
         const groupInfo = await conn.groupGetInviteInfo(inviteCode)
         const groupJid = groupInfo.id
 
-        // search song using yt-search
+        // search song (yt-search)
         const search = await yts(songName)
-        if (!search.videos.length) {
+        if (!search.videos || !search.videos.length) {
             return reply('❌ Song not found!')
         }
 
@@ -52,18 +52,26 @@ Usage:
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // NEW YT API (MP3)
+        // NEW YT → MP3 API
         const apiUrl =
 `https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/ytapi?apiKey=${API_KEY}&url=${encodeURIComponent(video.url)}&fo=mp3&qu=128`
 
         const res = await fetch(apiUrl)
         const json = await res.json()
 
-        if (!json || !json.result || !json.result.download) {
-            return reply('❌ Download failed!')
-        }
+        // SAFE download url detection (FIX)
+        let downloadUrl =
+            json?.result?.download ||
+            json?.result?.url ||
+            json?.download ||
+            json?.url ||
+            json?.data?.download ||
+            json?.data?.url
 
-        const downloadUrl = json.result.download
+        if (!downloadUrl) {
+            console.log('API RESPONSE:', json)
+            return reply('❌ Download failed! API response changed.')
+        }
 
         // thumbnail buffer
         const thumbBuffer = await axios.get(video.thumbnail, {
@@ -75,6 +83,7 @@ Usage:
 `🙋 Requested by @${requester.split('@')[0]}
 
 🎵 *${video.title}*
+
 👤 *Author:* ${video.author.name}
 ⏱️ *Duration:* ${video.timestamp}
 👁️ *Views:* ${video.views}
