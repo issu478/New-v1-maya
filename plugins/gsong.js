@@ -1,12 +1,12 @@
 const { cmd } = require('../command')
 const yts = require('yt-search')
 const axios = require('axios')
-const { ytmp3 } = require('dxz-ytdl')
+const fetch = require('node-fetch')
 
 cmd({
     pattern: 'gsong',
     desc: 'Auto send song to group as document with details',
-    react: '🎧',
+    react: '🎧', 
     category: 'download',
     filename: __filename
 },
@@ -50,14 +50,19 @@ Usage:
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // 🎵 download mp3 using dxz-ytdl
-        const mp3 = await ytmp3(video.url, 128)
+        // get mp3
+        const res = await fetch(
+            `http://vpn.asitha.top:3000/api/ytmp3?url=${video.url}`
+        )
+        const json = await res.json()
 
-        if (!mp3 || !mp3.download) {
+        if (!json.result || !json.result.download) {
             return reply('❌ Download failed!')
         }
 
-        // thumbnail
+        const downloadUrl = json.result.download
+
+        // thumbnail buffer
         const thumbBuffer = await axios.get(video.thumbnail, {
             responseType: 'arraybuffer'
         }).then(res => res.data)
@@ -78,16 +83,16 @@ Usage:
         await conn.sendMessage(
             groupJid,
             {
-                document: { url: mp3.download },
+                document: { url: downloadUrl },
                 mimetype: 'audio/mpeg',
-                fileName: `${video.title}.mp3`,
+                fileName: video.title + '.mp3',
                 jpegThumbnail: thumbBuffer,
                 caption: caption,
                 mentions: [requester]
             }
         )
 
-        await reply('✅ *Song uploaded to group successfully!*')
+        await reply('*Song uploaded to group successfully!* ')
 
     } catch (e) {
         console.error(e)
