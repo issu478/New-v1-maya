@@ -1,9 +1,7 @@
 const { cmd } = require('../command')
 const yts = require('yt-search')
 const axios = require('axios')
-const fetch = require('node-fetch')
-
-const API_KEY = 'd7d14f1bba24e3b13fb93227ed49cfba0dcbc1305e09e43387195015e4111d07'
+const { ytmp3 } = require('dxz-ytdl')
 
 cmd({
     pattern: 'gsong',
@@ -37,14 +35,14 @@ Usage:
         // requester
         const requester = mek.key.participant || mek.key.remoteJid
 
-        // get group jid
+        // group jid
         const inviteCode = groupLink.split('chat.whatsapp.com/')[1]
         const groupInfo = await conn.groupGetInviteInfo(inviteCode)
         const groupJid = groupInfo.id
 
-        // search song (yt-search)
+        // search song
         const search = await yts(songName)
-        if (!search.videos || !search.videos.length) {
+        if (!search.videos.length) {
             return reply('❌ Song not found!')
         }
 
@@ -52,28 +50,14 @@ Usage:
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // NEW YT → MP3 API
-        const apiUrl =
-`https://foreign-marna-sithaunarathnapromax-9a005c2e.koyeb.app/api/ytapi?apiKey=${API_KEY}&url=${encodeURIComponent(video.url)}&fo=mp3&qu=128`
+        // 🎵 download mp3 using dxz-ytdl
+        const mp3 = await ytmp3(video.url, 128)
 
-        const res = await fetch(apiUrl)
-        const json = await res.json()
-
-        // SAFE download url detection (FIX)
-        let downloadUrl =
-            json?.result?.download ||
-            json?.result?.url ||
-            json?.download ||
-            json?.url ||
-            json?.data?.download ||
-            json?.data?.url
-
-        if (!downloadUrl) {
-            console.log('API RESPONSE:', json)
-            return reply('❌ Download failed! API response changed.')
+        if (!mp3 || !mp3.download) {
+            return reply('❌ Download failed!')
         }
 
-        // thumbnail buffer
+        // thumbnail
         const thumbBuffer = await axios.get(video.thumbnail, {
             responseType: 'arraybuffer'
         }).then(res => res.data)
@@ -90,11 +74,11 @@ Usage:
 
 > © Powered by Sandes Isuranda`
 
-        // send MP3 as DOCUMENT
+        // send document to group
         await conn.sendMessage(
             groupJid,
             {
-                document: { url: downloadUrl },
+                document: { url: mp3.download },
                 mimetype: 'audio/mpeg',
                 fileName: `${video.title}.mp3`,
                 jpegThumbnail: thumbBuffer,
