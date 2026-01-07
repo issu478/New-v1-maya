@@ -1,11 +1,12 @@
 const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
+const OWNER = "94716717099"
+
 cmd({
     on: "body"
 },
 async (conn, mek, m, {
-    from,
     body,
     isCmd,
     senderNumber,
@@ -13,31 +14,35 @@ async (conn, mek, m, {
 }) => {
     try {
 
-        // ❌ empty
         if (!body) return
 
-        // ❌ commands ignore
+        // commands skip
         if (isCmd) return
-        if (body.startsWith('.') || body.startsWith('!') || body.startsWith('/')) return
+        if (/^[./!#]/.test(body)) return
 
-        // 🌐 API call (DIRECT MESSAGE → DIRECT RESPONSE)
-        let data = await fetchJson(
-            `https://api.nekolabs.web.id/text.gen/grok/3-mini?text=${encodeURIComponent(body)}`
+        // API text
+        let text = body
+
+        // owner respect prompt (API level)
+        if (senderNumber === OWNER) {
+            text = `This message is from my creator Sandes Isuranda. Reply with extra respect.\n\n${body}`
+        }
+
+        let res = await fetchJson(
+            `https://api.nekolabs.web.id/text.gen/grok/3-mini?text=${encodeURIComponent(text)}`
         )
 
-        let result =
-            data?.result ||
-            data?.response ||
-            data?.message ||
-            data?.data ||
+        let msg =
+            res?.result ||
+            res?.response ||
+            res?.data ||
             null
 
-        if (!result) return
+        if (!msg) return
 
-        // ✅ PURE API RESPONSE ONLY
-        return await reply(result)
+        return reply(msg)
 
     } catch (e) {
-        console.log(e)
+        console.log('[AUTO-AI ERROR]', e)
     }
 })
