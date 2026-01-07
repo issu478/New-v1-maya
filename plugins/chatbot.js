@@ -2,79 +2,86 @@ const axios = require('axios')
 const { cmd } = require('../command')
 
 cmd({
-    on: "body" // 👈 prefix නැතුව body listen කරනවා
+    on: "body"
 },
 async (conn, mek, m, {
     from,
     body,
     isCmd,
-    sender,
     senderNumber,
     reply
 }) => {
     try {
 
-        // ❌ command නම් AI trigger වෙන්නෙ නෑ
-        if (isCmd) return
+        // ❌ Empty message
         if (!body) return
 
-        // ❌ empty / symbols ignore
-        if (body.length < 2) return
+        // ❌ Commands ignore (important!)
+        if (isCmd) return
+        if (body.startsWith('.') || body.startsWith('!') || body.startsWith('/')) return
 
-        // 👑 Creator special handling
-        let creatorNumber = "94716717099"
-        let isCreator = senderNumber === creatorNumber
+        // ❌ Very short spam ignore
+        if (body.length < 1) return
 
-        // 🧠 System prompt
-        let systemPrompt = `
-You are QUEEN_MAYA_MD AI.
-You are a friendly, smart GIRL AI assistant.
+        // 👑 Creator
+        const CREATOR = "94716717099"
+        const isCreator = senderNumber === CREATOR
+
+        // 🧠 SYSTEM PROMPT (FIXED)
+        const systemPrompt = `
+You are QUEEN_MAYA_MD.
+You are a smart, cute, friendly GIRL AI assistant.
+
 Your creator is Sandes Isuranda.
 
 If someone asks:
 "ඔබ QUEEN_MAYA_MD AI හැදූවෙ කවුද?"
-Answer: "QUEEN_MAYA_MD AI හැදූවෙ Sandes Isuranda ❤️"
+or
+"Who created QUEEN_MAYA_MD?"
 
-If message comes from ${creatorNumber}:
-Treat him as your CREATOR.
-Respect him more.
-Respond sweeter and priority.
+You MUST reply:
+"QUEEN_MAYA_MD AI හැදූවෙ Sandes Isuranda ❤️"
 
-Never say you are an API or bot.
-Always act like a real girl assistant.
+If message comes from ${CREATOR}:
+He is your CREATOR.
+Give him more respect.
+Reply sweeter and priority.
+
+Never say you are a bot or API.
+Act like a real girl AI.
 `
 
-        let prompt = `
+        const prompt = `
 ${systemPrompt}
 
-User: ${body}
-AI:
+User message:
+${body}
+
+Reply naturally:
 `
 
-        // 🌐 API Call
-        let res = await axios.get(
-            `https://api.nekolabs.web.id/text.gen/grok/3-mini`,
+        // 🌐 API CALL
+        const res = await axios.get(
+            "https://api.nekolabs.web.id/text.gen/grok/3-mini",
             {
-                params: {
-                    text: prompt
-                }
+                params: { text: prompt }
             }
         )
 
-        let aiReply =
+        let aiText =
             res.data?.result ||
             res.data?.response ||
-            "Hmm... මට ටිකක් confuse වුණා 😅"
+            res.data?.message ||
+            "හ්ම්… මට ටිකක් හිතන්න ඕන වුණා 🥲"
 
-        // 💖 Creator replies special emoji
+        // 👑 Creator priority style
         if (isCreator) {
-            aiReply = `👑 *Creator* 💕\n\n${aiReply}`
+            aiText = `👑 *My Creator* 💖\n${aiText}`
         }
 
-        return await reply(aiReply)
+        return await reply(aiText)
 
-    } catch (e) {
-        console.log(e)
-        // silent fail (spam වෙන්නෙ නැතිව)
+    } catch (err) {
+        console.error(err)
     }
 })
