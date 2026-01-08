@@ -50,7 +50,7 @@ await conn.sendMessage(from,{image:{url:data.result.appicon},caption : "*Downloa
         reply("error while downloading apk ❌")
     }
 })
-})/* ================= FACEBOOK DOWNLOAD ================= */
+/* ================= FACEBOOK DOWNLOAD ================= */
 
 cmd({
     pattern: "fb",
