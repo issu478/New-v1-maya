@@ -16,43 +16,36 @@ cmd({
 },
 async (conn, mek, m, { from, q, reply }) => {
     try {
-        if (!q) return reply("කරුණාකර App එකේ නම ලබා දෙන්න\n\nඋදාහරණ: .apk whatsapp");
+        if (!q) return reply("give me app name\n\nexample: .apk whatsapp")
 
-        // API එකෙන් දත්ත ලබා ගැනීම
         let data = await fetchJson(
             `https://api.princetechn.com/api/download/apkdl?apikey=prince&appName=${encodeURIComponent(q)}`
-        );
+        )
 
-        if (!data || !data.result || !data.result.download) {
-            return reply("කණගාටුයි, එම APK එක සොයාගත නොහැකි විය ❌");
-        }
+        if (!data || !data.result)
+            return reply("apk not found ❌")
 
-        await reply("*Processing to Download ...*");
-
-        const caption = `📦 *${data.result.name}*
+const caption =
+`📦 *${data.result.appname}*
 
 🧑‍💻 Developer : ${data.result.developer || "Unknown"}
 🆕 Version   : ${data.result.version || "Latest"}
-📊 Size      : ${data.result.size}
 
-${devDetails}
-${yourName}`;
+`
 
-        // ගොනුව යැවීම
+await conn.sendMessage(from,{image:{url:data.result.appicon},caption : "*Downloading APK...*" + caption},{quoted : mek})
+
         await conn.sendMessage(from, {
-            document: { url: data.result.download },
+            document: { url: data.result.download_url },
             mimetype: "application/vnd.android.package-archive",
-            fileName: `${data.result.name}.apk`,
-            caption: caption
-        }, { quoted: mek });
+            fileName: `${data.result.appname}.apk`
+        }, { quoted: mek })
 
     } catch (e) {
-        console.error(e);
-        reply("*Error While Downloading*");
+        console.log(e)
+        reply("error while downloading apk ❌")
     }
-});
-
-/* ================= FACEBOOK DOWNLOAD ================= */
+})/* ================= FACEBOOK DOWNLOAD ================= */
 
 cmd({
     pattern: "fb",
