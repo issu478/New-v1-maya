@@ -26,7 +26,9 @@ async (conn, mek, m, { from, q, reply }) => {
             return reply("apk not found ❌")
 
 const caption =
-`  *╭*▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+` 
+
+   *╭*▰▰▰▰▰▰▰▰▰▰▰▰▰✦
   *▕* 📦 *${data.result.appname}*
   *▕*
   *▕*🧑‍💻 Developer : ${data.result.developer || "Unknown"}
