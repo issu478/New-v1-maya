@@ -1,8 +1,8 @@
 const { fetchJson } = require('../lib/functions')
 const { cmd } = require('../command')
+const axios = require('axios')
 
 const yourName = "> *©ᴘᴏᴡᴇʀᴇᴅ ʙʏ ꜱᴀɴᴅᴇꜱ ɪꜱᴜʀᴀɴᴅᴀ ツ*"
-const devDetails = "👨‍💻 Developer : Sandes Isuranda"
 
 cmd({
     pattern: "ss",
@@ -15,27 +15,28 @@ cmd({
 async (conn, mek, m, { from, q, reply }) => {
     try {
         if (!q || !q.startsWith("http"))
-            return reply("give me a valid url\n\nexample: .ss https://google.com")
+            return reply("Please provide a valid URL\n\nExample: .ss https://google.com")
 
-        reply("*Taking Screenshot...*")
+        reply("*Capturing Screenshot...*")
 
         let data = await fetchJson(
             `https://api.princetechn.com/api/tools/ssweb?apikey=prince&url=${encodeURIComponent(q)}`
         )
 
         if (!data || !data.result || !data.result.screenshot)
-            return reply("unable to take screenshot ❌")
+            return reply("Unable to capture screenshot ❌")
+
+        const imageUrl = data.result.screenshot;
+        const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+        const buffer = Buffer.from(response.data, 'binary');
 
         await conn.sendMessage(from, {
-            image: { url: data.result.screenshot },
-            caption:
-`🖼️ Screenshot of : ${q}
-
-${yourName}`
+            image: buffer,
+            caption: `🖼️ *Screenshot of:* ${q}\n\n${yourName}`
         }, { quoted: mek })
 
     } catch (e) {
-        console.log(e)
-        reply("error while taking screenshot ❌")
+        console.error(e)
+        reply("An error occurred while processing the screenshot ❌")
     }
 })
