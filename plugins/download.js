@@ -26,11 +26,15 @@ async (conn, mek, m, { from, q, reply }) => {
             return reply("apk not found ❌")
 
 const caption =
-`📦 *${data.result.appname}*
-
-🧑‍💻 Developer : ${data.result.developer || "Unknown"}
-🆕 Version   : ${data.result.version || "Latest"}
-
+`  *╭*▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+  *▕* 📦 *${data.result.appname}*
+  *▕*
+  *▕*🧑‍💻 Developer : ${data.result.developer || "Unknown"}
+  *▕*🆕 Version   : ${data.result.version || "Latest"}
+  *▕*🗿 Reviwe : Undefined  
+  *▕*⬇️ Downloads : Undefined 
+   *╰*▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+> *Powered by Sandes Isuranda ㋡*
 `
 
 await conn.sendMessage(from,{image:{url:data.result.appicon},caption : "*Downloading APK...*" + caption},{quoted : mek})
@@ -45,6 +49,7 @@ await conn.sendMessage(from,{image:{url:data.result.appicon},caption : "*Downloa
         console.log(e)
         reply("error while downloading apk ❌")
     }
+})
 })/* ================= FACEBOOK DOWNLOAD ================= */
 
 cmd({
