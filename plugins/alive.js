@@ -18,7 +18,7 @@ try {
     await conn.sendMessage(from, {
         audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
         mimetype: "audio/mpeg",
-        ptt: true
+        ptt: false 
     }, { quoted: mek })
 
     await sleep(500)
@@ -87,7 +87,7 @@ try {
 
     // 🔵 ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://files.catbox.moe/roundvideo.mp4" },
+        video: { url: "https://files.catbox.moe/u4tout.mp4" },
         ptv: true
     }, { quoted: mek })
 
