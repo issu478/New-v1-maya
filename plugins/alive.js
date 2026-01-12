@@ -1,129 +1,179 @@
 const config = require('../config')
-const {cmd , commands} = require('../command')
+const { cmd, commands } = require('../command')
 const os = require("os")
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson} = require('../lib/functions')
+const { runtime, sleep } = require('../lib/functions')
+
+//================ ALIVE =================
 cmd({
     pattern: "alive",
-    desc: "Check bot online or no.",
+    desc: "Check bot online status",
+    react: "👋",
     category: "main",
     filename: __filename
 },
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-return await conn.sendMessage(from,{image: {url: config.ALIVE_IMG},caption: config.ALIVE_MSG},{quoted: mek})
-}catch(e){
-console.log(e)
-reply(`${e}`)
+async (conn, mek, m, { from, pushname }) => {
+try {
+
+    let aliveText = `
+👋 Hello *${pushname}*  
+
+🤖 *QUEEN MAYA-MD*  
+━━━━━━━━━━━━━━━
+✅ Status : *Online*
+⏱ Uptime : *${runtime(process.uptime())}*
+⚙ Mode   : *Public*
+🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
+🖥 Host   : *${os.hostname()}*
+━━━━━━━━━━━━━━━
+
+_Type *.menu* to see commands_
+
+> © Powered by *Sandes Isuranda*
+`
+
+    await conn.sendMessage(from, {
+        image: { url: config.ALIVE_IMG }, // alive image
+        caption: aliveText
+    }, { quoted: mek })
+
+} catch (e) {
+    console.log(e)
 }
 })
 
-//============ping=======
+
+//================ PING =================
 cmd({
     pattern: "ping",
     react: "🚀",
     alias: ["speed"],
-    desc: "Check bot\'s ping",
+    desc: "Check bot response speed",
     category: "main",
-    use: '.ping',
     filename: __filename
 },
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-var inital = new Date().getTime();
-let ping = await conn.sendMessage(from , { text: '```Pinging To index.js!!!```'  }, { quoted: mek } )
-var final = new Date().getTime();
-return await conn.edit(ping, '*Pong' + (final - inital) + ' ms* ' )
+async (conn, mek, m, { from }) => {
+try {
+    let start = new Date().getTime()
+    let msg = await conn.sendMessage(from, { text: "```Pinging...```" }, { quoted: mek })
+    let end = new Date().getTime()
+    await conn.edit(msg, `*Pong!* 🚀 ${end - start} ms`)
 } catch (e) {
-reply(`${e}`)
-console.log(e)
+    console.log(e)
 }
 })
 
-//===========menu========
+
+//================ MENU (ROUND VIDEO + IMAGE + NUMBER) =================
 cmd({
     pattern: "menu",
-    desc: "To get the menu.",
-    react: "📁",
+    desc: "Show menu",
+    react: "📂",
     category: "main",
     filename: __filename
 },
-async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-try{
-    
-let menu = {
-main: '',
-download: '',
-group: '',
-owner: '',
-convert: '',
-ai: '',
-tools: '',
-search: '',
-fun: '',
-voice: '',
-other: ''
-};
+async (conn, mek, m, { from, pushname }) => {
+try {
 
-for (let i = 0; i < commands.length; i++) {
-if (commands[i].pattern && !commands[i].dontAddCommandList) {
-menu[commands[i].category] += `.${commands[i].pattern}\n`;
- }
+    // 🔵 Round video
+    await conn.sendMessage(from, {
+        video: { url: "https://files.catbox.moe/03o57r.mp4" },
+        pvt: true
+    }, { quoted: mek })
+
+    await sleep(700)
+
+    // 🖼 Menu image + numbers
+    let menuText = `
+👋 Hello *${pushname}*
+
+🤖 *QUEEN MAYA-MD*
+━━━━━━━━━━━━━━━
+⏱ Uptime : ${runtime(process.uptime())}
+👑 Owner  : Sandes Isuranda
+⚙ Mode   : Public
+━━━━━━━━━━━━━━━
+
+Reply with a number 👇
+
+1️⃣ Download Menu  
+2️⃣ Group Menu  
+3️⃣ Owner Menu  
+4️⃣ Search Menu  
+5️⃣ Other Menu  
+
+_Reply only the number (Ex: 1)_
+`
+
+    await conn.sendMessage(from, {
+        image: { url: "https://files.catbox.moe/4bc81k.png" },
+        caption: menuText
+    }, { quoted: mek })
+
+} catch (e) {
+    console.log(e)
 }
-
-let madeMenu = `
-👋 𝙷𝙴𝙻𝙻𝙾𝚆 𝚃𝙷𝙴𝚁𝙴, ${pushname}
-
-_𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗤𝗨𝗘𝗘𝗡 𝗠𝗔𝗬𝗔 〽️𝗗_  
-╭─「 ᴄᴏᴍᴍᴀɴᴅꜱ ᴘᴀɴᴇʟ」
-│◈ *Up time - ${runtime(process.uptime())}*
-│◈ *Bot Owner - Sandes isuranda 
-│◈ *Owner number* - 94716717099 
-│◈ *Mode - Public*
-│◈ *Group - Working*
-│◈ *System - 95.9*
-╰──────────●●►
-╭──────────●●►
-│◈     ⬇️ *Download Menu*
-│ 
-│ .tiktok ( Download Tik Tok videos )
-│ .mp43 ( Download YouTube Videos )
-│ .song3 (Download YouTube Songs )
-│ .mediafire ( Download mediafire files )
-│
-│◈     👤 *Owner Menu*
-│ 
-│ .jid (Get your jid)
-│ .gjid (Get group jids)
-│ .block (Block some one)
-│ .ban (Band some one)
-│ .setpp (Set your Dp)
-│  
-│◈     ✨ *Other Menu*
-│ 
-│ .ping (Check bot response speed)
-│ .menu (Check Available Cmd)
-│ .system ( Bot informations) 
-│◈     🔍 *Search Menu*
-│ 
-│ .yts (Search YouTube )
-│ .tiktoksearch (Tik Tok Search)
-│
-│◈ 👥 *Group Menu*
-│
-│ .add ( Add a person )
-│ .kick ( Remove a pereson )
-│ .mute ( Mute the group )
-│ .unmute ( Unmute the group )
-│ .tagall ( Tag every one ) 
-│
-╰───────────●●►
+})
 
 
-> *©ᴘᴏᴡᴇʀᴇᴅ ʙʏ Sandes isuranda ツ*`
+//================ NUMBER REPLY HANDLER =================
+cmd({
+    pattern: "^[1-5]$",
+    dontAddCommandList: true,
+    filename: __filename
+},
+async (conn, mek, m, { from, body, reply }) => {
+try {
 
-return await conn.sendMessage(from,{image: {url: `https://files.catbox.moe/4bc81k.png`},caption:madeMenu},{quoted: mek})
-}catch(e){
-console.log(e)
-reply(`*Error !* Couldn't load menu`)
+    if (body === "1") {
+        return reply(`
+⬇️ *DOWNLOAD MENU*
+.tiktok
+.mp43
+.song3
+.mediafire
+`)
+    }
+
+    if (body === "2") {
+        return reply(`
+👥 *GROUP MENU*
+.add
+.kick
+.mute
+.unmute
+.tagall
+`)
+    }
+
+    if (body === "3") {
+        return reply(`
+👤 *OWNER MENU*
+.jid
+.gjid
+.block
+.ban
+.setpp
+`)
+    }
+
+    if (body === "4") {
+        return reply(`
+🔍 *SEARCH MENU*
+.yts
+.tiktoksearch
+`)
+    }
+
+    if (body === "5") {
+        return reply(`
+✨ *OTHER MENU*
+.ping
+.menu
+.system
+`)
+    }
+
+} catch (e) {
+    console.log(e)
 }
 })
