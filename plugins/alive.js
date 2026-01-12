@@ -77,7 +77,7 @@ try {
     // 🔵 Round video
     await conn.sendMessage(from, {
         video: { url: "https://files.catbox.moe/03o57r.mp4" },
-        pvt: true
+        ptv: true
     }, { quoted: mek })
 
     await sleep(700)
