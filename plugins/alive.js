@@ -1,38 +1,51 @@
 const config = require('../config')
-const { cmd, commands } = require('../command')
+const { cmd } = require('../command')
 const os = require("os")
 const { runtime, sleep } = require('../lib/functions')
 
 //================ ALIVE =================
 cmd({
     pattern: "alive",
-    desc: "Check bot online status",
-    react: "👋",
+    desc: "Bot alive check with voice",
+    react: "👨‍💻",
     category: "main",
     filename: __filename
 },
 async (conn, mek, m, { from, pushname }) => {
 try {
 
+    // 🔊 VOICE MESSAGE
+    await conn.sendMessage(from, {
+        audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
+        mimetype: "audio/mpeg",
+        ptt: true
+    }, { quoted: mek })
+
+    await sleep(500)
+
+    // 💎 ALIVE MESSAGE
     let aliveText = `
-👋 Hello *${pushname}*  
+👋 Hello *${pushname}* 🌸  
 
-🤖 *QUEEN MAYA-MD*  
-━━━━━━━━━━━━━━━
-✅ Status : *Online*
-⏱ Uptime : *${runtime(process.uptime())}*
-⚙ Mode   : *Public*
-🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
-🖥 Host   : *${os.hostname()}*
-━━━━━━━━━━━━━━━
+*QUEEN MAYA-MD Is Alive Now🔥*
+_Im Redy To Assist You_🔥 
+┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+┃🟢 Status : *Online & Stable*
+┃⏱ Uptime : *${runtime(process.uptime())}*
+┃⚙ Mode   : *Public*
+┃🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
+┃🖥 Host   : *${os.hostname()}*
+┃👨‍💻 Developer : Sandes Isuranda 
+┗▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+✨ _I'm alive & ready to serve you_
 
-_Type *.menu* to see commands_
+Type *.menu* to view commands 📂  
 
 > © Powered by *Sandes Isuranda*
 `
 
     await conn.sendMessage(from, {
-        image: { url: config.ALIVE_IMG }, // alive image
+        image: { url: config.ALIVE_IMG },
         caption: aliveText
     }, { quoted: mek })
 
@@ -40,7 +53,6 @@ _Type *.menu* to see commands_
     console.log(e)
 }
 })
-
 
 //================ PING =================
 cmd({
@@ -56,17 +68,16 @@ try {
     let start = new Date().getTime()
     let msg = await conn.sendMessage(from, { text: "```Pinging...```" }, { quoted: mek })
     let end = new Date().getTime()
-    await conn.edit(msg, `*Pong!* 🚀 ${end - start} ms`)
+    await conn.edit(msg, `*Pong  ${end - start} ms*`)
 } catch (e) {
     console.log(e)
 }
 })
 
-
-//================ MENU (ROUND VIDEO + IMAGE + NUMBER) =================
+//================ MENU =================
 cmd({
     pattern: "menu",
-    desc: "Show menu",
+    desc: "Menu with round video + image + number reply",
     react: "📂",
     category: "main",
     filename: __filename
@@ -74,24 +85,31 @@ cmd({
 async (conn, mek, m, { from, pushname }) => {
 try {
 
-    // 🔵 Round video
+    // 🔵 ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://files.catbox.moe/03o57r.mp4" },
+        video: { url: "https://files.catbox.moe/roundvideo.mp4" },
         ptv: true
     }, { quoted: mek })
 
-    await sleep(700)
+    await sleep(600)
 
-    // 🖼 Menu image + numbers
+    // 🖼 MENU IMAGE + NUMBERS
     let menuText = `
 👋 Hello *${pushname}*
 
-🤖 *QUEEN MAYA-MD*
-━━━━━━━━━━━━━━━
-⏱ Uptime : ${runtime(process.uptime())}
-👑 Owner  : Sandes Isuranda
-⚙ Mode   : Public
-━━━━━━━━━━━━━━━
+*Wellcome to QUEEN MAYA-MD 🔥* 
+              ▰▰▰▰▰▰▰▰
+               ╰ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ╯
+              ▰▰▰▰▰▰▰▰
+ 
+┏▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+┃⏱Uptime : ${runtime(process.uptime())}
+┃👑 Owner  : Sandes Isuranda
+┃⚙ Mode   : Public
+┃🔥 Owner No : 94716717099
+┃💻 Type : Node.js
+┃👨‍💻Total Commands : 20 +
+┗▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 
 Reply with a number 👇
 
@@ -101,7 +119,9 @@ Reply with a number 👇
 4️⃣ Search Menu  
 5️⃣ Other Menu  
 
-_Reply only the number (Ex: 1)_
+_Reply only the number (1 - 5)_
+
+> Powered by Sandes Isuranda ㋡
 `
 
     await conn.sendMessage(from, {
@@ -115,14 +135,17 @@ _Reply only the number (Ex: 1)_
 })
 
 
-//================ NUMBER REPLY HANDLER =================
+//================ NUMBER REPLY SYSTEM (FIXED) =================
 cmd({
-    pattern: "^[1-5]$",
+    on: "text",
     dontAddCommandList: true,
     filename: __filename
 },
-async (conn, mek, m, { from, body, reply }) => {
+async (conn, mek, m, { from, body, isCmd, reply }) => {
 try {
+
+    // ❌ ignore commands
+    if (isCmd) return
 
     if (body === "1") {
         return reply(`
