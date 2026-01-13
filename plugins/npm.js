@@ -10,7 +10,7 @@ cmd({
 },
 async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply('❌ Package name එකක් දාන්න')
+        if (!q) return reply('❌ Package name missing ')
 
         const res = await axios.get(`https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(q)}&size=1`)
         const pkg = res.data.objects[0]?.package
@@ -32,7 +32,7 @@ async (conn, mek, m, { from, reply, q }) => {
 > Powered by Sandes Isuranda`
 
         const sent = await conn.sendMessage(from, {
-            image: { url: 'https://static.npmjs.com/images/npmlogo.svg' },
+            image: { url: 'https://files.catbox.moe/4pmdgt.jpeg' },
             caption: menu
         }, { quoted: mek })
 
