@@ -25,7 +25,7 @@ try {
     // 2️⃣ VOICE MESSAGE
     await conn.sendMessage(from, {
         audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
-        mimetype: "audio/opus",
+        mimetype: "audio/mpeg",
         ptt: false 
     }, { quoted: mek })
 
