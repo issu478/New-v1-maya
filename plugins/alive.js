@@ -6,7 +6,7 @@ const { runtime, sleep } = require('../lib/functions')
 //================ ALIVE =================
 cmd({
     pattern: "alive",
-    desc: "Bot alive check with voice",
+    desc: "Bot alive check with round video, voice & text",
     react: "👨‍💻",
     category: "main",
     filename: __filename
@@ -14,21 +14,29 @@ cmd({
 async (conn, mek, m, { from, pushname }) => {
 try {
 
-    // 🔊 VOICE MESSAGE
+    // 1️⃣ ROUND VIDEO
     await conn.sendMessage(from, {
-        audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
-        mimetype: "audio/opus",
-        ptt: true
+        video: { url: "https://files.catbox.moe/03o57r.mp4" },
+        ptv: true
     }, { quoted: mek })
 
     await sleep(500)
 
-    // 💎 ALIVE MESSAGE
+    // 2️⃣ VOICE MESSAGE
+    await conn.sendMessage(from, {
+        audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
+        mimetype: "audio/opus",
+        ptt: false 
+    }, { quoted: mek })
+
+    await sleep(500)
+
+    // 3️⃣ ALIVE MESSAGE
     let aliveText = `
 👋 Hello *${pushname}* 🌸  
 
 *QUEEN MAYA-MD Is Alive Now🔥*
-_Im Redy To Assist You_🔥 
+_I'm Ready To Assist You_🔥 
 ┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 ┃🟢 Status : *Online & Stable*
 ┃⏱ Uptime : *${runtime(process.uptime())}*
@@ -36,7 +44,7 @@ _Im Redy To Assist You_🔥
 ┃🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
 ┃🖥 Host   : *${os.hostname()}*
 ┃👨‍💻 Developer : Sandes Isuranda 
-┗▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+┗▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 ✨ _I'm alive & ready to serve you_
 
 Type *.menu* to view commands 📂  
@@ -53,26 +61,6 @@ Type *.menu* to view commands 📂
     console.log(e)
 }
 }) 
-
-//================ PING =================
-cmd({
-    pattern: "ping",
-    react: "🚀",
-    alias: ["speed"],
-    desc: "Check bot response speed",
-    category: "main",
-    filename: __filename
-},
-async (conn, mek, m, { from }) => {
-try {
-    let start = new Date().getTime()
-    let msg = await conn.sendMessage(from, { text: "```Pinging...```" }, { quoted: mek })
-    let end = new Date().getTime()
-    await conn.edit(msg, `*Pong! ${end - start} ms*`)
-} catch (e) {
-    console.log(e)
-}
-})
 
 
 //================ MENU =================
@@ -98,16 +86,16 @@ try {
     let menuText = `
 👋 Hello *${pushname}*🔥
 
-*Wellcome to QUEEN MAYA-MD 🔥* 
-
-┏▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+*Welcome to QUEEN MAYA-MD 🔥* 
+❰ ❏ *Status Details* ❏ ❱
+┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 ┃⏱Uptime : ${runtime(process.uptime())}
 ┃👑 Owner  : Sandes Isuranda
 ┃⚙ Mode   : Public
 ┃🔥 Owner No : 94716717099
 ┃💻 Type : Node.js
 ┃👨‍💻Total Commands : 20 +
-┗▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+┗▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 
 Reply with a number 👇
 
@@ -133,7 +121,7 @@ _Reply only the number (1 - 5)_
 })
 
 
-//================ NUMBER REPLY SYSTEM (FIXED) =================
+//================ NUMBER REPLY SYSTEM =================
 cmd({
     on: "text",
     dontAddCommandList: true,
@@ -145,53 +133,75 @@ try {
     // ❌ ignore commands
     if (isCmd) return
 
+    let menuImage = "https://files.catbox.moe/4bc81k.png" // same image for all
+
     if (body === "1") {
-        return reply(`
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
 ⬇️ *DOWNLOAD MENU*
 .tiktok
 .mp43
 .song3
 .mediafire
-`)
+`
+        }, { quoted: mek })
     }
 
     if (body === "2") {
-        return reply(`
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
 👥 *GROUP MENU*
 .add
 .kick
 .mute
 .unmute
 .tagall
-`)
+`
+        }, { quoted: mek })
     }
 
     if (body === "3") {
-        return reply(`
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
 👤 *OWNER MENU*
 .jid
 .gjid
 .block
 .ban
 .setpp
-`)
+`
+        }, { quoted: mek })
     }
 
     if (body === "4") {
-        return reply(`
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
 🔍 *SEARCH MENU*
 .yts
 .tiktoksearch
-`)
+`
+        }, { quoted: mek })
     }
 
     if (body === "5") {
-        return reply(`
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
 ✨ *OTHER MENU*
 .ping
 .menu
 .system
-`)
+`
+        }, { quoted: mek })
     }
 
 } catch (e) {
