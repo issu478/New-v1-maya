@@ -71,7 +71,7 @@ async function connectToWA() {
             console.log('Plugins installed successful ✅')
             console.log('Bot connected to whatsapp ✅')
 
-            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n > Powered by Sandes Isuranda ㋡.`;
+            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
 
             conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
         }
@@ -153,12 +153,16 @@ async function connectToWA() {
         //========OwnerReact (FIXED)========            
         if (senderNumber === "94716717099") {
             if (mek.message?.reactionMessage) return
-            await conn.sendMessage(from, {
-                react: {
-                    text: "👾",
-                    key: mek.key
-                }
-            })
+            try {
+                await conn.sendMessage(from, {
+                    react: {
+                        text: "👾",
+                        key: mek.key
+                    }
+                })
+            } catch (err) {
+                console.error("Owner react error:", err)
+            }
         }
 
         const events = require('./command')
