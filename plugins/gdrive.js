@@ -3,14 +3,14 @@ const axios = require('axios')
 
 cmd({
     pattern: 'gdrive',
-    desc: 'Google Drive downloader (Download + Details)',
+    desc: 'Google Drive downloader (Auto Download + Details)',
     react: '📥',
     category: 'download',
     filename: __filename
 },
 async (conn, mek, m, { from, reply, q }) => {
     try {
-        if (!q) return reply('❌ Google Drive link එකක් දාන්න')
+        if (!q) return reply('❌ Google Drive link එකක් දෙන්න')
 
         // 🔑 API
         const apiUrl = `https://api.princetechn.com/api/download/gdrivedl?apikey=prince&url=${encodeURIComponent(q)}`
@@ -18,61 +18,12 @@ async (conn, mek, m, { from, reply, q }) => {
         const result = res.data?.result
         if (!result) return reply('❌ File data ගන්න බැරි වුණා')
 
-        // 🖼 Custom thumbnail URL (මෙතන change කරගන්න)
+        // 🖼 Custom thumbnail URL (document thumbnail ලෙස)
         const CUSTOM_THUMB =
             'https://files.catbox.moe/4pmdgt.jpeg' // 👈 custom thumbnail url
 
-        // 📩 Menu caption
-        const menu = `*📥 GDRIVE FILE DOWNLOADER*
-
-📄 *Name* : ${result.name}
-📦 *Size* : ${result.size}
-🗂 *Type* : ${result.ext}
-
-*Reply with number 👇*
-
-1️⃣ Download File  
-2️⃣ File Details  
-
-> © Powered by Sandes Isuranda`
-
-        // 📤 Send menu
-        const sentMsg = await conn.sendMessage(
-            from,
-            {
-                image: { url: CUSTOM_THUMB },
-                caption: menu
-            },
-            { quoted: mek }
-        )
-
-        // 🔢 Reply handler (FIXED)
-        const handler = async (update) => {
-            const msg = update.messages[0]
-            if (!msg.message?.extendedTextMessage) return
-
-            const text = msg.message.extendedTextMessage.text.trim()
-            const ctx = msg.message.extendedTextMessage.contextInfo
-            if (!ctx || ctx.stanzaId !== sentMsg.key.id) return
-
-            // remove listener after reply
-            conn.ev.off('messages.upsert', handler)
-
-            if (text === '1') {
-                // ⬇ Download
-                await conn.sendMessage(
-                    from,
-                    {
-                        document: { url: result.download },
-                        fileName: result.name,
-                        mimetype: result.mime
-                    },
-                    { quoted: msg }
-                )
-
-            } else if (text === '2') {
-                // 📋 Details
-                const details = `*📄 FILE DETAILS*
+        // 📋 File details
+        const details = `*📄 FILE DETAILS*
 
 📄 Name : ${result.name}
 🗂 Type : ${result.ext}
@@ -80,19 +31,20 @@ async (conn, mek, m, { from, reply, q }) => {
 🔗 Source :
 ${q}
 
-⬇ Download :
-${result.download}
+> Powered by Sandes MD`
 
-> QUEEN-MAYA-MD`
-
-                reply(details)
-
-            } else {
-                reply('❌ 1 හෝ 2 reply කරන්න')
-            }
-        }
-
-        conn.ev.on('messages.upsert', handler)
+        // 📤 Auto send document with details as caption
+        await conn.sendMessage(
+            from,
+            {
+                document: { url: result.download },
+                fileName: result.name,
+                mimetype: result.mime,
+                caption: details,
+                thumbnail: await (await axios.get(CUSTOM_THUMB, { responseType: 'arraybuffer' })).data
+            },
+            { quoted: mek }
+        )
 
     } catch (e) {
         console.error(e)
