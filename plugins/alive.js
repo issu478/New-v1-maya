@@ -17,8 +17,8 @@ try {
     // 🔊 VOICE MESSAGE
     await conn.sendMessage(from, {
         audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
-        mimetype: "audio/mpeg",
-        ptt: false 
+        mimetype: "audio/opus",
+        ptt: true
     }, { quoted: mek })
 
     await sleep(500)
@@ -52,7 +52,7 @@ Type *.menu* to view commands 📂
 } catch (e) {
     console.log(e)
 }
-})
+}) 
 
 //================ PING =================
 cmd({
@@ -68,11 +68,12 @@ try {
     let start = new Date().getTime()
     let msg = await conn.sendMessage(from, { text: "```Pinging...```" }, { quoted: mek })
     let end = new Date().getTime()
-    await conn.edit(msg, `*Pong  ${end - start} ms*`)
+    await conn.edit(msg, `*Pong! ${end - start} ms*`)
 } catch (e) {
     console.log(e)
 }
 })
+
 
 //================ MENU =================
 cmd({
@@ -87,7 +88,7 @@ try {
 
     // 🔵 ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://files.catbox.moe/u4tout.mp4" },
+        video: { url: "https://files.catbox.moe/03o57r.mp4" },
         ptv: true
     }, { quoted: mek })
 
@@ -95,13 +96,10 @@ try {
 
     // 🖼 MENU IMAGE + NUMBERS
     let menuText = `
-👋 Hello *${pushname}*
+👋 Hello *${pushname}*🔥
 
 *Wellcome to QUEEN MAYA-MD 🔥* 
-              ▰▰▰▰▰▰▰▰
-               ╰ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ╯
-              ▰▰▰▰▰▰▰▰
- 
+
 ┏▰▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 ┃⏱Uptime : ${runtime(process.uptime())}
 ┃👑 Owner  : Sandes Isuranda
