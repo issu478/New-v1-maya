@@ -71,7 +71,7 @@ async function connectToWA() {
             console.log('Plugins installed successful ✅')
             console.log('Bot connected to whatsapp ✅')
 
-            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
+            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n > Powered by Sandes Isuranda ㋡.`;
 
             conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
         }
@@ -89,7 +89,6 @@ async function connectToWA() {
 
         const m = sms(conn, mek)
         const type = getContentType(mek.message)
-        const content = JSON.stringify(mek.message)
         const from = mek.key.remoteJid
         const quoted = type == 'extendedTextMessage' && mek.message.extendedTextMessage.contextInfo != null ? mek.message.extendedTextMessage.contextInfo.quotedMessage || [] : []
         const body = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : ''
@@ -111,7 +110,6 @@ async function connectToWA() {
         const groupAdmins = isGroup ? await getGroupAdmins(participants) : ''
         const isBotAdmins = isGroup ? groupAdmins.includes(botNumber2) : false
         const isAdmins = isGroup ? groupAdmins.includes(sender) : false
-        const isReact = m.message.reactionMessage ? true : false
         const reply = (teks) => {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
         }
@@ -150,14 +148,14 @@ async function connectToWA() {
             }
         }
 
-        //========OwnerReact (FIXED)========            
+        //========OWNER REACT (WORKING)========
         if (senderNumber === "94716717099") {
             if (mek.message?.reactionMessage) return
             try {
                 await conn.sendMessage(from, {
                     react: {
+                        key: mek.key,
                         text: "👾",
-                        key: mek.key
                     }
                 })
             } catch (err) {
