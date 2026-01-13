@@ -86,7 +86,7 @@ try {
     let menuText = `
 👋 Hello *${pushname}*🔥
 
-*Welcome to QUEEN MAYA-MD 🔥* 
+*Welcome to SANDES-MD 🔥* 
 ❰ ❏ *Status Details* ❏ ❱
 ┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
 ┃⏱Uptime : ${runtime(process.uptime())}
@@ -111,7 +111,7 @@ _Reply only the number (1 - 5)_
 `
 
     await conn.sendMessage(from, {
-        image: { url: "https://files.catbox.moe/4bc81k.png" },
+        image: { url: "https://files.catbox.moe/6ib761.png" },
         caption: menuText
     }, { quoted: mek })
 
@@ -123,7 +123,7 @@ _Reply only the number (1 - 5)_
 
 //================ NUMBER REPLY SYSTEM =================
 cmd({
-    on: "text",
+    on: "body",
     dontAddCommandList: true,
     filename: __filename
 },
@@ -133,7 +133,7 @@ try {
     // ❌ ignore commands
     if (isCmd) return
 
-    let menuImage = "https://files.catbox.moe/4bc81k.png" // same image for all
+    let menuImage = "https://files.catbox.moe/6ib761.png" // same image for all
 
     if (body === "1") {
         await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
