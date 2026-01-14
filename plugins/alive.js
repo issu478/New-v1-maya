@@ -16,7 +16,7 @@ try {
 
     // 1️⃣ ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://files.catbox.moe/03o57r.mp4" },
+        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
         ptv: true
     }, { quoted: mek })
 
@@ -76,7 +76,7 @@ try {
 
     // 🔵 ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://files.catbox.moe/03o57r.mp4" },
+        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
         ptv: true
     }, { quoted: mek })
 
