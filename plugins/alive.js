@@ -24,7 +24,7 @@ try {
 
     // 2️⃣ VOICE MESSAGE
     await conn.sendMessage(from, {
-        audio: { url: "https://files.catbox.moe/wj2d61.mp3" }, // alive voice
+        audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" }, // alive voice
         mimetype: "audio/mpeg",
         ptt: false 
     }, { quoted: mek })
@@ -88,14 +88,15 @@ try {
 
 *Welcome to SANDES-MD 🔥* 
 ❰ ❏ *Status Details* ❏ ❱
-┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
-┃⏱Uptime : ${runtime(process.uptime())}
-┃👑 Owner  : Sandes Isuranda
-┃⚙ Mode   : Public
-┃🔥 Owner No : 94716717099
-┃💻 Type : Node.js
-┃👨‍💻Total Commands : 20 +
-┗▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+╔════════════════════✦
+║ ⏱Uptime : ${runtime(process.uptime())}
+║ 👑 Owner  : Sandes Isuranda
+║ ⚙ Mode   : Public
+║ 🔥 Owner No : 94716717099
+║ 💻 Type : Node.js
+║ 👨‍💻Total Commands : 20 + 
+║ 🧬 Visit Us : sandes-ofc.zone.id 
+╚════════════════════✦
 
 Reply with a number 👇
 
