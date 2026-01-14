@@ -16,7 +16,7 @@ try {
 
     // 1️⃣ ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
+        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768384369287_2rlpi.mp4" },
         ptv: true
     }, { quoted: mek })
 
@@ -33,18 +33,20 @@ try {
 
     // 3️⃣ ALIVE MESSAGE
     let aliveText = `
-👋 Hello *${pushname}* 🌸  
+👋 Hello *${pushname}*  
 
-*QUEEN MAYA-MD Is Alive Now🔥*
+*SANDES-MD Is Alive Now🔥*
+
 _I'm Ready To Assist You_🔥 
-┏▰▰▰▰▰▰▰▰▰▰▰▰▰✦
-┃🟢 Status : *Online & Stable*
-┃⏱ Uptime : *${runtime(process.uptime())}*
-┃⚙ Mode   : *Public*
-┃🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
-┃🖥 Host   : *${os.hostname()}*
-┃👨‍💻 Developer : Sandes Isuranda 
-┗▰▰▰▰▰▰▰▰▰▰▰▰▰✦
+╔════════════════════✦
+║ 🟢 Status : *Online & Stable*
+║ ⏱ Uptime : *${runtime(process.uptime())}*
+║ ⚙ Mode   : *Public*
+║ 🧬 Version : 2.3.0
+║ 🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
+║ 🖥 Host   : *${os.hostname()}*
+║ 👨‍💻 Developer : Sandes Isuranda 
+╚════════════════════✦
 ✨ _I'm alive & ready to serve you_
 
 Type *.menu* to view commands 📂  
