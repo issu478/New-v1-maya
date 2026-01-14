@@ -111,7 +111,7 @@ _Reply only the number (1 - 5)_
 `
 
     await conn.sendMessage(from, {
-        image: { url: "https://files.catbox.moe/6ib761.png" },
+        image: { url: "https://upld.zone.id/uploads/d4i0x5iq/logo.webp" },
         caption: menuText
     }, { quoted: mek })
 
@@ -123,7 +123,7 @@ _Reply only the number (1 - 5)_
 
 //================ NUMBER REPLY SYSTEM =================
 cmd({
-    on: "body",
+    on: "text",
     dontAddCommandList: true,
     filename: __filename
 },
@@ -133,7 +133,7 @@ try {
     // ❌ ignore commands
     if (isCmd) return
 
-    let menuImage = "https://files.catbox.moe/6ib761.png" // same image for all
+    let menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp" // same image for all
 
     if (body === "1") {
         await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
