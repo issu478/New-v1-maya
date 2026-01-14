@@ -24,7 +24,7 @@ async (conn, mek, m, { from, reply, q }) => {
         await reply("⬇️ *Downloading your video... Please wait*")
 
         // 🎥 MP4 API (360p)
-        const apiUrl = `https://ominisave.vercel.app/api/ytmp4?url=${url}`
+        const apiUrl = `https://ominisave.vercel.app/api/ytmp4?url=${encodeURIComponent(ytUrl)}`
         const res = await axios.get(apiUrl)
         const data = res.data
 
