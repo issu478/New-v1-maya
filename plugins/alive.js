@@ -3,6 +3,7 @@ const { cmd } = require('../command')
 const os = require("os")
 const { runtime, sleep } = require('../lib/functions')
 
+
 //================ ALIVE =================
 cmd({
     pattern: "alive",
@@ -16,7 +17,7 @@ try {
 
     // 1️⃣ ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768384369287_2rlpi.mp4" },
+        video: { url: "https://https://saviya-kolla-database.vercel.app/VIDEO/1768384369287_2rlpi.mp4/03o57r.mp4" },
         ptv: true
     }, { quoted: mek })
 
@@ -24,34 +25,35 @@ try {
 
     // 2️⃣ VOICE MESSAGE
     await conn.sendMessage(from, {
-        audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" }, // alive voice
-        mimetype: "audio/mpeg",
-        ptt: false 
+        audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" },
+        mimetype: "audio/opus",
+        ptt: true
     }, { quoted: mek })
 
     await sleep(500)
 
     // 3️⃣ ALIVE MESSAGE
     let aliveText = `
-👋 Hello *${pushname}*  
+👋 Hello *${pushname}* 🌸  
 
-*SANDES-MD Is Alive Now🔥*
+*HEELO USER I'M ALIVE NOW🔥* 
 
-_I'm Ready To Assist You_🔥 
-╔════════════════════✦
-║ 🟢 Status : *Online & Stable*
-║ ⏱ Uptime : *${runtime(process.uptime())}*
-║ ⚙ Mode   : *Public*
-║ 🧬 Version : 2.3.0
-║ 🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
-║ 🖥 Host   : *${os.hostname()}*
-║ 👨‍💻 Developer : Sandes Isuranda 
-╚════════════════════✦
+╔══════════════════════❏
+║🟢 Status : *Online & Stable*
+║⏱ Uptime : *${runtime(process.uptime())}*
+║⚙ Mode   : *Public*
+║🧠 RAM    : *${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB*
+║🖥 Host   : *${os.hostname()}*
+║👨‍💻 Developer : Sandes Isuranda 
+╚══════════════════════❏
+
 ✨ _I'm alive & ready to serve you_
+
 
 Type *.menu* to view commands 📂  
 
-> © Powered by *Sandes Isuranda*
+
+> © Powered by Sandes Isuranda
 `
 
     await conn.sendMessage(from, {
@@ -62,7 +64,7 @@ Type *.menu* to view commands 📂
 } catch (e) {
     console.log(e)
 }
-}) 
+})
 
 
 //================ MENU =================
@@ -88,27 +90,28 @@ try {
     let menuText = `
 👋 Hello *${pushname}*🔥
 
-*Welcome to SANDES-MD 🔥* 
-❰ ❏ *Status Details* ❏ ❱
-╔════════════════════✦
-║ ⏱Uptime : ${runtime(process.uptime())}
-║ 👑 Owner  : Sandes Isuranda
-║ ⚙ Mode   : Public
-║ 🔥 Owner No : 94716717099
-║ 💻 Type : Node.js
-║ 👨‍💻Total Commands : 20 + 
-║ 🧬 Visit Us : sandes-ofc.zone.id 
-╚════════════════════✦
+*Welcome to SANDES MD🔥* 
 
-Reply with a number 👇
+*╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ  ──●●►*
+*│* 🙋 *𝘜𝘴𝘦𝘳 =* ${pushname} 
+*│* ⏰ *𝘙𝘶𝘯 𝘵𝘪𝘮𝘦 =* ${runtime(process.uptime())}
+*│* 💬 *𝘝𝘦𝘳𝘴𝘪𝘰𝘯 =* V 02
+*│* 👾 *𝘉𝘰𝘵 = SANDES MD*
+*│* ☎️ *𝘖𝘸𝘯𝘦𝘳 = 94716717099*
+*│* ✒️ *𝘗𝘳𝘦𝘧𝘪𝘹 = .*
+*╰──────────●●►*
 
-1️⃣ Download Menu  
-2️⃣ Group Menu  
-3️⃣ Owner Menu  
-4️⃣ Search Menu  
-5️⃣ Other Menu  
+*-Reply The Number Bellow_* 🔥
 
-_Reply only the number (1 - 5)_
+🔶  01 ▏Download Menu 
+🔶  02 ▏Group Menu  
+🔶  03 ▏Owner Menu  
+🔶  04 ▏Search Menu  
+🔶  05 ▏Other Menu   
+🔶  06 ▏Main Menu 
+
+
+*Main Site -* sandes-ofc.zone.id 
 
 > Powered by Sandes Isuranda ㋡
 `
@@ -130,13 +133,13 @@ cmd({
     dontAddCommandList: true,
     filename: __filename
 },
-async (conn, mek, m, { from, body, isCmd, reply }) => {
+async (conn, mek, m, { from, body, isCmd }) => {
 try {
 
     // ❌ ignore commands
     if (isCmd) return
 
-    let menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp" // same image for all
+    let menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
 
     if (body === "1") {
         await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
@@ -144,10 +147,13 @@ try {
             image: { url: menuImage },
             caption: `
 ⬇️ *DOWNLOAD MENU*
+
 .tiktok
-.mp43
-.song3
-.mediafire
+.video 
+.song
+.mediafire 
+.apk 
+
 `
         }, { quoted: mek })
     }
@@ -158,6 +164,7 @@ try {
             image: { url: menuImage },
             caption: `
 👥 *GROUP MENU*
+
 .add
 .kick
 .mute
@@ -173,6 +180,7 @@ try {
             image: { url: menuImage },
             caption: `
 👤 *OWNER MENU*
+
 .jid
 .gjid
 .block
@@ -188,8 +196,10 @@ try {
             image: { url: menuImage },
             caption: `
 🔍 *SEARCH MENU*
+
 .yts
 .tiktoksearch
+.npm 
 `
         }, { quoted: mek })
     }
@@ -200,12 +210,31 @@ try {
             image: { url: menuImage },
             caption: `
 ✨ *OTHER MENU*
+
 .ping
 .menu
 .system
 `
         }, { quoted: mek })
+    } 
+    
+    if (body === "6") {
+        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
+        return conn.sendMessage(from, {
+            image: { url: menuImage },
+            caption: `
+🔥 *MAIN MENU*
+
+.owner
+.system
+.menu
+.ping 
+.alive
+
+`
+        }, { quoted: mek })
     }
+
 
 } catch (e) {
     console.log(e)
