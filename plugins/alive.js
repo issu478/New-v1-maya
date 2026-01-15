@@ -15,24 +15,21 @@ cmd({
 async (conn, mek, m, { from, pushname }) => {
 try {
 
-    // 1️⃣ ROUND VIDEO
     await conn.sendMessage(from, {
-        video: { url: "https://https://saviya-kolla-database.vercel.app/VIDEO/1768384369287_2rlpi.mp4/03o57r.mp4" },
+        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
         ptv: true
     }, { quoted: mek })
 
     await sleep(500)
 
-    // 2️⃣ VOICE MESSAGE
     await conn.sendMessage(from, {
         audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" },
-        mimetype: "audio/opus",
-        ptt: true
+        mimetype: "audio/mpge",
+        ptt: false 
     }, { quoted: mek })
 
     await sleep(500)
 
-    // 3️⃣ ALIVE MESSAGE
     let aliveText = `
 👋 Hello *${pushname}* 🌸  
 
@@ -49,9 +46,7 @@ try {
 
 ✨ _I'm alive & ready to serve you_
 
-
 Type *.menu* to view commands 📂  
-
 
 > © Powered by Sandes Isuranda
 `
@@ -78,7 +73,6 @@ cmd({
 async (conn, mek, m, { from, pushname }) => {
 try {
 
-    // 🔵 ROUND VIDEO
     await conn.sendMessage(from, {
         video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
         ptv: true
@@ -86,83 +80,77 @@ try {
 
     await sleep(600)
 
-    // 🖼 MENU IMAGE + NUMBERS
     let menuText = `
 👋 Hello *${pushname}*🔥
 
 *Welcome to SANDES MD🔥* 
 
 *╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ  ──●●►*
-*│* 🙋 *𝘜𝘴𝘦𝘳 =* ${pushname} 
-*│* ⏰ *𝘙𝘶𝘯 𝘵𝘪𝘮𝘦 =* ${runtime(process.uptime())}
-*│* 💬 *𝘝𝘦𝘳𝘴𝘪𝘰𝘯 =* V 02
-*│* 👾 *𝘉𝘰𝘵 = SANDES MD*
-*│* ☎️ *𝘖𝘸𝘯𝘦𝘳 = 94716717099*
-*│* ✒️ *𝘗𝘳𝘦𝘧𝘪𝘹 = .*
+*│* 🙋 User = ${pushname} 
+*│* ⏰ Run time = ${runtime(process.uptime())}
+*│* 🧬 Version = V 02
+*│* 👾 Bot = SANDES MD
+*│* ☎️ Owner = 94716717099
+*│* ✒️ Prefix = .
 *╰──────────●●►*
 
-*-Reply The Number Bellow_* 🔥
+*_Reply The Number Below_* 🔥
 
-🔶  01 ▏Download Menu 
-🔶  02 ▏Group Menu  
-🔶  03 ▏Owner Menu  
-🔶  04 ▏Search Menu  
-🔶  05 ▏Other Menu   
-🔶  06 ▏Main Menu 
+🔶 01 ▏Download Menu 
+🔶 02 ▏Group Menu  
+🔶 03 ▏Owner Menu  
+🔶 04 ▏Search Menu  
+🔶 05 ▏Other Menu   
+🔶 06 ▏Main Menu  
 
-
-*Main Site -* sandes-ofc.zone.id 
+*Main Site* - sandes-ofc.zone.id
 
 > Powered by Sandes Isuranda ㋡
 `
 
-    await conn.sendMessage(from, {
+    const sentMenu = await conn.sendMessage(from, {
         image: { url: "https://upld.zone.id/uploads/d4i0x5iq/logo.webp" },
         caption: menuText
     }, { quoted: mek })
 
-} catch (e) {
-    console.log(e)
-}
-})
+    const menuMsgId = sentMenu.key.id
 
+    //================ NUMBER REPLY HANDLER =================
+    const handler = async (msgData) => {
+        try {
+            const msg = msgData.messages[0]
+            if (!msg?.message) return
 
-//================ NUMBER REPLY SYSTEM =================
-cmd({
-    on: "text",
-    dontAddCommandList: true,
-    filename: __filename
-},
-async (conn, mek, m, { from, body, isCmd }) => {
-try {
+            const replyId =
+                msg.message.extendedTextMessage?.contextInfo?.stanzaId
+            const text =
+                msg.message.conversation ||
+                msg.message.extendedTextMessage?.text
 
-    // ❌ ignore commands
-    if (isCmd) return
+            if (!text || replyId !== menuMsgId) return
 
-    let menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
+            const fromUser = msg.key.remoteJid
+            const menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
 
-    if (body === "1") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+            if (text === "1" || text === "01") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 ⬇️ *DOWNLOAD MENU*
 
 .tiktok
-.video 
+.video
 .song
-.mediafire 
-.apk 
-
+.mediafire
+.apk
 `
-        }, { quoted: mek })
-    }
+                }, { quoted: msg })
+            }
 
-    if (body === "2") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+            if (text === "2" || text === "02") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 👥 *GROUP MENU*
 
 .add
@@ -171,14 +159,13 @@ try {
 .unmute
 .tagall
 `
-        }, { quoted: mek })
-    }
+                }, { quoted: msg })
+            }
 
-    if (body === "3") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+            if (text === "3" || text === "03") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 👤 *OWNER MENU*
 
 .jid
@@ -187,54 +174,64 @@ try {
 .ban
 .setpp
 `
-        }, { quoted: mek })
-    }
+                }, { quoted: msg })
+            }
 
-    if (body === "4") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+            if (text === "4" || text === "04") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 🔍 *SEARCH MENU*
 
 .yts
 .tiktoksearch
-.npm 
+.npm
 `
-        }, { quoted: mek })
-    }
+                }, { quoted: msg })
+            }
 
-    if (body === "5") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+            if (text === "5" || text === "05") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 ✨ *OTHER MENU*
 
 .ping
 .menu
 .system
 `
-        }, { quoted: mek })
-    } 
-    
-    if (body === "6") {
-        await conn.sendMessage(from, { react: { text: "🧬", key: mek.key } })
-        return conn.sendMessage(from, {
-            image: { url: menuImage },
-            caption: `
+                }, { quoted: msg })
+            }
+
+            if (text === "6" || text === "06") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
 🔥 *MAIN MENU*
 
 .owner
 .system
 .menu
-.ping 
+.ping
 .alive
-
 `
-        }, { quoted: mek })
+                }, { quoted: msg })
+            }
+
+            await conn.sendMessage(fromUser, {
+                text: "❌ Invalid option! Reply only 01 - 06"
+            }, { quoted: msg })
+
+        } catch (err) {
+            console.log("Number reply error:", err)
+        }
     }
 
+    conn.ev.on("messages.upsert", handler)
+
+    setTimeout(() => {
+        conn.ev.off("messages.upsert", handler)
+    }, 300000)
 
 } catch (e) {
     console.log(e)
