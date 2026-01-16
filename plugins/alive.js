@@ -16,7 +16,7 @@ async (conn, mek, m, { from, pushname }) => {
 try {
 
     await conn.sendMessage(from, {
-        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768383621686_yl221.mp4" },
+        video: { url: "https://saviya-kolla-database.vercel.app/VIDEO/1768384369287_2rlpi.mp4" },
         ptv: true
     }, { quoted: mek })
 
@@ -24,8 +24,8 @@ try {
 
     await conn.sendMessage(from, {
         audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" },
-        mimetype: "audio/mpge",
-        ptt: false 
+        mimetype: "audio/mpeg",
+        ptt: false
     }, { quoted: mek })
 
     await sleep(500)
@@ -101,9 +101,7 @@ try {
 🔶 03 ▏Owner Menu  
 🔶 04 ▏Search Menu  
 🔶 05 ▏Other Menu   
-🔶 06 ▏Main Menu  
-
-*Main Site* - sandes-ofc.zone.id
+🔶 06 ▏Main Menu 
 
 > Powered by Sandes Isuranda ㋡
 `
@@ -131,6 +129,11 @@ try {
 
             const fromUser = msg.key.remoteJid
             const menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
+
+            // 🧬 REACT TO NUMBER REPLY
+            await conn.sendMessage(fromUser, {
+                react: { text: "🧬", key: msg.key }
+            })
 
             if (text === "1" || text === "01") {
                 return conn.sendMessage(fromUser, {
