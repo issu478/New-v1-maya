@@ -83,25 +83,26 @@ try {
     let menuText = `
 👋 Hello *${pushname}*🔥
 
-*Welcome to SANDES MD🔥* 
+ 🫟 *Welcome to SANDES MD* 
 
-*╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ  ──●●►*
-*│* 🙋 User = ${pushname} 
+*╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ 」──●●►*
+*│* 👤 User = ${pushname} 
 *│* ⏰ Run time = ${runtime(process.uptime())}
 *│* 🧬 Version = V 02
+*│* 📟 Ram Usage = ${(process.memoryUsage().rss / 1024 / 1024).toFixed(2)} MB
 *│* 👾 Bot = SANDES MD
 *│* ☎️ Owner = 94716717099
 *│* ✒️ Prefix = .
 *╰──────────●●►*
 
-*_Reply The Number Below_* 🔥
+🔢 *_Reply The Number Below_* 🔥
 
-🔶 01 ▏Download Menu 
-🔶 02 ▏Group Menu  
-🔶 03 ▏Owner Menu  
-🔶 04 ▏Search Menu  
-🔶 05 ▏Other Menu   
-🔶 06 ▏Main Menu 
+*🔶 01* ❱❱⦁* Download Menu
+*🔶 02* ❱❱⦁* Group Menu 
+*🔶 03* ❱❱⦁* Owner Menu 
+*🔶 04* ❱❱⦁* Search Menu
+*🔶 05* ❱❱⦁* Main Menu
+*🔶 06* ❱❱⦁* Fun Menu
 
 > Powered by Sandes Isuranda ㋡
 `
@@ -139,13 +140,22 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
-⬇️ *DOWNLOAD MENU*
+ 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
 
-.tiktok
-.video
-.song
-.mediafire
-.apk
+*╭───「 Download Commands 」──●●►* 
+*╎* 
+*╎* .tiktok
+*╎* .video
+*╎* .song
+*╎* .mediafire
+*╎* .apk 
+*╎*  
+*╎* Total Commands - 4 
+*╰───────────────────●●►* 
+
+> *Powered By Sandes Isuranda ㋡* 
 `
                 }, { quoted: msg })
             }
@@ -153,14 +163,23 @@ try {
             if (text === "2" || text === "02") {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
-                    caption: `
-👥 *GROUP MENU*
+                    caption:`
+ 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
 
-.add
-.kick
-.mute
-.unmute
-.tagall
+*╭───「 Group Commands 」──●●►* 
+*╎* 
+*╎* .tagall
+*╎* .mute
+*╎* .unmute
+*╎* .kick
+*╎* .add
+*╎*
+*╎* Total Commands - 5 
+*╰───────────────────●●►* 
+
+> *Powered By Sandes Isuranda ㋡* 
 `
                 }, { quoted: msg })
             }
@@ -169,13 +188,22 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
-👤 *OWNER MENU*
+ 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
 
-.jid
-.gjid
-.block
-.ban
-.setpp
+*╭───「 Owner Commands 」──●●►* 
+*╎* 
+*╎* .jid
+*╎* .gjid
+*╎* .block 
+*╎* .unblock
+*╎* .band 
+*╎* 
+*╎* Total Commands - 5
+*╰───────────────────●●►* 
+
+> *Powered By Sandes Isuranda ㋡* 
 `
                 }, { quoted: msg })
             }
@@ -183,12 +211,22 @@ try {
             if (text === "4" || text === "04") {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
-                    caption: `
-🔍 *SEARCH MENU*
+                    caption: `  
+ 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
 
-.yts
-.tiktoksearch
-.npm
+*╭───「 Search Commands 」──●●►* 
+*╎* 
+*╎* .github
+*╎* .yts
+*╎* .tiks
+*╎* .npm
+*╎*  
+*╎* Total Commands - 4 
+*╰───────────────────●●►* 
+
+> *Powered By Sandes Isuranda ㋡* 
 `
                 }, { quoted: msg })
             }
@@ -197,11 +235,22 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
-✨ *OTHER MENU*
+ 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
 
-.ping
-.menu
-.system
+*╭───「 Main Commands 」──●●►* 
+*╎* 
+*╎* .ping
+*╎* .menu
+*╎* .alive
+*╎* .owner
+*╎* .system
+*╎*  
+*╎* Total Commands - 5
+*╰───────────────────●●►* 
+
+> *Powered By Sandes Isuranda ㋡* 
 `
                 }, { quoted: msg })
             }
