@@ -97,12 +97,12 @@ try {
 
 🔢 *_Reply The Number Below_* 🔥
 
-*🔶 01* ❱❱⦁* Download Menu
-*🔶 02* ❱❱⦁* Group Menu 
-*🔶 03* ❱❱⦁* Owner Menu 
-*🔶 04* ❱❱⦁* Search Menu
-*🔶 05* ❱❱⦁* Main Menu
-*🔶 06* ❱❱⦁* Fun Menu
+*🔶 01* ❱❱⦁ Download Menu
+*🔶 02* ❱❱⦁ Group Menu 
+*🔶 03* ❱❱⦁ Owner Menu 
+*🔶 04* ❱❱⦁ Search Menu
+*🔶 05* ❱❱⦁ Main Menu
+*🔶 06* ❱❱⦁ Fun Menu
 
 > Powered by Sandes Isuranda ㋡
 `
@@ -140,20 +140,28 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
- 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
  
 🎀 *Commands Menu* 🎀
 
-*╭───「 Download Commands 」──●●►* 
+*╭───「 Main Commands 」──●●►* 
 *╎* 
-*╎* .tiktok
-*╎* .video
-*╎* .song
-*╎* .mediafire
-*╎* .apk 
-*╎*  
-*╎* Total Commands - 4 
+*╎*   🫟 Command - .song 
+*╎* 🔖 Usage - Download a Song
+*╎*   🫟 Command - .video 
+*╎* 🔖 Usage - Download a Video 
+*╎*   🫟 Command - .mediafire 
+*╎* 🔖 Usage - download mediafire files 
+*╎*   🫟 Command - .csong 
+*╎* 🔖 Usage - Chanel Song 
+*╎*   🫟 Command - .fb 
+*╎* 🔖 Usage - Download Facebook Videos 
+*╎*   🫟 Command - .apk
+*╎* 🔖 Usage - Download Apk
+*╎* 
+*╎* Total Commands - 7
 *╰───────────────────●●►* 
+
 
 > *Powered By Sandes Isuranda ㋡* 
 `
@@ -164,20 +172,32 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption:`
- 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
  
 🎀 *Commands Menu* 🎀
 
 *╭───「 Group Commands 」──●●►* 
 *╎* 
-*╎* .tagall
-*╎* .mute
-*╎* .unmute
-*╎* .kick
-*╎* .add
-*╎*
-*╎* Total Commands - 5 
+*╎*   🫟 Command - .tagall 
+*╎* 🔖 Usage - Mention All memebers
+*╎*   🫟 Command - .hidetag
+*╎* 🔖 Usage - Mention All members 
+*╎*   🫟 Command - .add
+*╎* 🔖 Usage - Add some one 
+*╎*   🫟 Command - .kick
+*╎* 🔖 Usage - Remove some one
+*╎*   🫟 Command - .promote
+*╎* 🔖 Usage - Make As Admin 
+*╎*   🫟 Command - .demote
+*╎* 🔖 Usage - Remove Admin
+*╎*   🫟 Command - .mute
+*╎* 🔖 Usage - Admin Only massage  
+*╎*   🫟 Command - .unmute
+*╎* 🔖 Usage - All member massage 
+*╎*  
+*╎* Total Commands - 7
 *╰───────────────────●●►* 
+
 
 > *Powered By Sandes Isuranda ㋡* 
 `
@@ -188,20 +208,26 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
- 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
  
 🎀 *Commands Menu* 🎀
 
-*╭───「 Owner Commands 」──●●►* 
+*╭───「 Main Commands 」──●●►* 
 *╎* 
-*╎* .jid
-*╎* .gjid
-*╎* .block 
-*╎* .unblock
-*╎* .band 
-*╎* 
+*╎*   🫟 Command - .jid
+*╎* 🔖 Usage - Check Available JID 
+*╎*   🫟 Command - .shutdown
+*╎* 🔖 Usage - Shutting Down System
+*╎*   🫟 Command - .block
+*╎* 🔖 Usage - Block some one
+*╎*   🫟 Command - .unblock 
+*╎* 🔖 Usage - Unblock some one
+*╎*   🫟 Command - .gjid
+*╎* 🔖 Usage - Group JIDS 
+*╎*  
 *╎* Total Commands - 5
 *╰───────────────────●●►* 
+
 
 > *Powered By Sandes Isuranda ㋡* 
 `
@@ -212,18 +238,22 @@ try {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `  
- 👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+                    👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
  
 🎀 *Commands Menu* 🎀
 
-*╭───「 Search Commands 」──●●►* 
+*╭───「 Search Commands  」──●●►* 
 *╎* 
-*╎* .github
-*╎* .yts
-*╎* .tiks
-*╎* .npm
+*╎*   🫟 Command - .yts
+*╎* 🔖 Usage - You Tube Search  
+*╎*   🫟 Command - .npm
+*╎* 🔖 Usage - Search For NPM packages 
+*╎*   🫟 Command - .github 
+*╎* 🔖 Usage - Search Github Repo 
+*╎*   🫟 Command - .tiks
+*╎* 🔖 Usage - Tik Tok Search
 *╎*  
-*╎* Total Commands - 4 
+*╎*  Total Commands - 5
 *╰───────────────────●●►* 
 
 > *Powered By Sandes Isuranda ㋡* 
@@ -241,11 +271,16 @@ try {
 
 *╭───「 Main Commands 」──●●►* 
 *╎* 
-*╎* .ping
-*╎* .menu
-*╎* .alive
-*╎* .owner
-*╎* .system
+*╎*   🫟 Command - .ping 
+*╎* 🔖 Usage - Check Bot Speed 
+*╎*   🫟 Command - .menu
+*╎* 🔖 Usage - Show Available Commands 
+*╎*   🫟 Command - .alive 
+*╎* 🔖 Usage - Check bot alive 
+*╎*   🫟 Command - .owner
+*╎* 🔖 Usage - Contact Owner
+*╎*   🫟 Command - .system
+*╎* 🔖 Usage - Check System 
 *╎*  
 *╎* Total Commands - 5
 *╰───────────────────●●►* 
