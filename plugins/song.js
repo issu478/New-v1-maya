@@ -16,7 +16,7 @@ async (conn, mek, m, { from, reply, q }) => {
         // 🔍 Search YouTube
         const search = await yts(q)
         const video = search.videos[0]
-        if (!video) return reply('❌ *Video not found*')
+        if (!video) return reply('❌ *Song not found*')
 
         const ytUrl = video.url
 
@@ -30,19 +30,21 @@ async (conn, mek, m, { from, reply, q }) => {
 
         const dlUrl = res.data.result.downloadLink
 
-        const caption = `*🎧 QUEEN-MAYA-MD SONG DOWNLOADER*
-
-🎵 *Title:* ${video.title}
-⏱ *Duration:* ${video.timestamp}
-👀 *Views:* ${video.views}
-
-*Reply with a number 👇*
-
-*1️⃣ Voice Note*
-*2️⃣ Normal Audio*
-*3️⃣ Document*
-
-> © Powered by Sandes Isuranda`
+        const caption = `
+╭───────────────────────●●►
+│ *SANDES MD SONG DOWNLOADER*
+╰───────────────────●●►
+│ 🎵 *Title:* ${video.title}
+│ ⏱ *Duration:* ${video.timestamp}
+│ 👀 *Views:* ${video.views}
+│
+│ *Reply The Number bellow*
+│
+│ *1 ❱❱● Voice Note*
+│ *2 ❱❱● Normal Audio*
+│ *3 ❱❱● Document*
+╰─────────────────────────●●►     
+> Powered by Sandes Isuranda`
 
         const msg = await conn.sendMessage(from, {
             image: { url: video.thumbnail },
@@ -84,7 +86,7 @@ async (conn, mek, m, { from, reply, q }) => {
                     }, { quoted: m2 })
 
                 } else {
-                    reply('❌ *1 / 2 / 3 කියලා reply කරන්න*')
+                    reply('❌ *1 / 2 / 3  Reply Only*')
                 }
 
             } catch (e) {
