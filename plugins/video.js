@@ -17,19 +17,24 @@ async (conn, mek, m, { from, q, reply }) => {
         const data = search.videos[0]
         const ytUrl = data.url
 
-        let desc = `*📽️ QUEEN-MAYA-MD VIDEO DOWNLOADER . .⚙️*
+        let desc = `
+*SANDES 〽️D VIDEO DOWNLOADER*
+╭────────────────────●●►
+│ 📽️ TITLE - ${data.title}
+│ 👀 VIEWS - ${data.views}
+│ ⏱️ TIME - ${data.timestamp}
+│ 📅 AGO - ${data.ago}
+│
+│ *Reply The Number Bellow* 🔢
+│
+│ *1 Video With Normal Format*
+│ *2 Video With Document Format*
+╰───────────────────────●●►
 
-📽️ TITLE - ${data.title}
-👀 VIEWS - ${data.views}
-⏱️ TIME - ${data.timestamp}
-📅 AGO - ${data.ago}
+*Main Site* - sandes-ofc.zone.id
 
-*Reply This Message With Option*
 
-*1 Video With Normal Format*
-*2 Video With Document Format*
-
-> *©ᴘᴏᴡᴇʀᴇᴅ ʙʏ ꜱᴀɴᴅᴇꜱ ɪꜱᴜʀᴀɴᴅᴀ ツ*`
+> *Powered By Sandes Isuranda *`
 
         const vv = await conn.sendMessage(
             from,
