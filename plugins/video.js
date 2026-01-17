@@ -3,54 +3,88 @@ const yts = require('yt-search')
 const axios = require('axios')
 
 cmd({
-    pattern: "video",
-    desc: "Download YouTube video 360p",
-    react: "🎥",
-    category: "download",
+    pattern: 'video',
+    desc: 'download videos',
+    react: "🎬",
+    category: 'download',
     filename: __filename
 },
-async (conn, mek, m, { from, reply, q }) => {
+async (conn, mek, m, { from, q, reply }) => {
     try {
-        if (!q) return reply("❌ *YouTube link or search query ekak denna*")
+        if (!q) return reply('*Please enter a query or a url !*')
 
-        // 🔍 Search video
         const search = await yts(q)
-        const video = search.videos[0]
-        if (!video) return reply("❌ *Video not found*")
+        const data = search.videos[0]
+        const ytUrl = data.url
 
-        const url = video.url
+        let desc = `*📽️ QUEEN-MAYA-MD VIDEO DOWNLOADER . .⚙️*
 
-        // ⏳ Downloading message
-        await reply("⬇️ *Downloading your video... Please wait*")
+📽️ TITLE - ${data.title}
+👀 VIEWS - ${data.views}
+⏱️ TIME - ${data.timestamp}
+📅 AGO - ${data.ago}
 
-        // 🎥 MP4 API (360p)
-        const apiUrl = `https://ominisave.vercel.app/api/ytmp4?url=${encodeURIComponent(ytUrl)}`
-        const res = await axios.get(apiUrl)
-        const data = res.data
+*Reply This Message With Option*
 
-        if (!data || !data.download) {
-            return reply("❌ *Video download failed*")
-        }
+*1 Video With Normal Format*
+*2 Video With Document Format*
 
-        const caption = ` 🔥 * SANDES MD YOUTUBE VIDEO DOWNLOADER*
+> *©ᴘᴏᴡᴇʀᴇᴅ ʙʏ ꜱᴀɴᴅᴇꜱ ɪꜱᴜʀᴀɴᴅᴀ ツ*`
 
-📌 *Title* : ${video.title}
-👤 *Author* : ${video.author.name}
-👁️ *Views* : ${video.views}
-❤️ *Likes* : ${video.likes || "N/A"}
-⏱️ *Duration* : ${video.timestamp}
+        const vv = await conn.sendMessage(
+            from,
+            { image: { url: data.thumbnail }, caption: desc },
+            { quoted: mek }
+        )
 
-> *Powered By Sandes Isuranda ツ*`
+        conn.ev.on('messages.upsert', async (msgUpdate) => {
+            const msg = msgUpdate.messages[0]
+            if (!msg.message?.extendedTextMessage) return
 
-        // 📤 Send video
-        await conn.sendMessage(from, {
-            video: { url: data.download },
-            caption: caption,
-            mimetype: "video/mp4"
-        }, { quoted: mek })
+            const selected = msg.message.extendedTextMessage.text.trim()
+            const ctx = msg.message.extendedTextMessage.contextInfo
+
+            if (!ctx || ctx.stanzaId !== vv.key.id) return
+
+            // 🔗 OminiSave API
+            const apiUrl = `https://ominisave.vercel.app/api/ytmp4?url=${encodeURIComponent(ytUrl)}`
+            const res = await axios.get(apiUrl)
+
+            const videoUrl =
+                res.data?.url ||
+                res.data?.result?.url ||
+                res.data?.download_url
+
+            if (!videoUrl) return reply('❌ Download link not found')
+
+            if (selected === '1') {
+                await conn.sendMessage(
+                    from,
+                    {
+                        video: { url: videoUrl },
+                        mimetype: 'video/mp4',
+                        caption: '> *© Powered by Sandes Isuranda*'
+                    },
+                    { quoted: mek }
+                )
+            } else if (selected === '2') {
+                await conn.sendMessage(
+                    from,
+                    {
+                        document: { url: videoUrl },
+                        mimetype: 'video/mp4',
+                        fileName: `${data.title}.mp4`,
+                        caption: '> *© Powered by Sandes Isuranda*'
+                    },
+                    { quoted: mek }
+                )
+            } else {
+                reply('❌ Invalid option')
+            }
+        })
 
     } catch (e) {
-        console.log(e)
-        reply("❌ *Error while downloading video*")
+        console.error(e)
+        reply('❌ Error while downloading video')
     }
 })
