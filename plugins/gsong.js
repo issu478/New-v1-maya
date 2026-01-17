@@ -5,8 +5,8 @@ const fetch = require('node-fetch')
 
 cmd({
     pattern: 'gsong',
-    desc: 'Auto send song to group as document with details',
-    react: '🎧', 
+    desc: 'Send song to group as document with full details',
+    react: '🎧',
     category: 'download',
     filename: __filename
 },
@@ -14,9 +14,9 @@ async (conn, mek, m, { from, reply, q }) => {
     try {
         if (!q || !q.includes(',')) {
             return reply(
-`❌ Usage wrong!
+`❌ *Wrong usage!*
 
-Usage:
+✅ Usage:
 .gsong song name , group link`
             )
         }
@@ -29,7 +29,7 @@ Usage:
         }
 
         if (!groupLink.includes('chat.whatsapp.com/')) {
-            return reply('❌ Invalid group link!')
+            return reply('❌ Invalid WhatsApp group link!')
         }
 
         // requester
@@ -47,20 +47,22 @@ Usage:
         }
 
         const video = search.videos[0]
+        const ytUrl = video.url
 
         await reply(`🎧 *Uploading song to group...*\n\n🎵 ${video.title}`)
 
-        // get mp3
-        const res = await fetch(
-            `http://vpn.asitha.top:3000/api/ytmp3?url=${video.url}`
-        )
+        // API call (ominisave)
+        const apiUrl = `https://ominisave.vercel.app/api/ytmp3_v2?url=${encodeURIComponent(ytUrl)}`
+        const res = await fetch(apiUrl)
         const json = await res.json()
 
-        if (!json.result || !json.result.download) {
-            return reply('❌ Download failed!')
+        if (!json || !json.download) {
+            return reply('❌ Download failed from API!')
         }
 
-        const downloadUrl = json.result.download
+        const downloadUrl = json.download
+        const quality = json.quality || '128kbps'
+        const size = json.size || 'Unknown'
 
         // thumbnail buffer
         const thumbBuffer = await axios.get(video.thumbnail, {
@@ -69,13 +71,17 @@ Usage:
 
         // caption
         const caption =
-`🙋 Requested by @${requester.split('@')[0]}
+`🙋 *Requested by:* @${requester.split('@')[0]}
 
-🎵 *${video.title}*
-
-👤 *Author:* ${video.author.name}
+🎵 *Title:* ${video.title}
+👤 *Artist:* ${video.author.name}
 ⏱️ *Duration:* ${video.timestamp}
 👁️ *Views:* ${video.views}
+
+🎚️ *Quality:* 128 kbps
+📦 *File Size:* ${size}
+
+🔗 *YouTube:* ${ytUrl}
 
 > © Powered by Sandes Isuranda`
 
@@ -85,14 +91,14 @@ Usage:
             {
                 document: { url: downloadUrl },
                 mimetype: 'audio/mpeg',
-                fileName: video.title + '.mp3',
+                fileName: `${video.title}.mp3`,
                 jpegThumbnail: thumbBuffer,
                 caption: caption,
                 mentions: [requester]
             }
         )
 
-        await reply('*Song uploaded to group successfully!* ')
+        await reply('✅ *Song uploaded to group successfully!* 🎶')
 
     } catch (e) {
         console.error(e)
