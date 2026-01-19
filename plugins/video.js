@@ -1,11 +1,10 @@
 const { cmd } = require('../command')
 const yts = require('yt-search')
 const axios = require('axios')
-
 cmd({
     pattern: 'video',
     desc: 'download videos',
-    react: "🎬",
+    react: "🎥",
     category: 'download',
     filename: __filename
 },
@@ -18,23 +17,23 @@ async (conn, mek, m, { from, q, reply }) => {
         const ytUrl = data.url
 
         let desc = `
-*SANDES 〽️D VIDEO DOWNLOADER*
-╭────────────────────●●►
-│ 📽️ TITLE - ${data.title}
-│ 👀 VIEWS - ${data.views}
-│ ⏱️ TIME - ${data.timestamp}
-│ 📅 AGO - ${data.ago}
-│
-│ *Reply The Number Bellow* 🔢
-│
-│ *1 Video With Normal Format*
-│ *2 Video With Document Format*
-╰───────────────────────●●►
+*SANDES MD VIDEO DOWNLOADER*
+╭──────────────────────●●►
+╎📽️ TITLE - ${data.title}
+╎👀 VIEWS - ${data.views}
+╎⏱️ TIME - ${data.timestamp}
+╎📅 AGO - ${data.ago}
+╎
+╎*Reply This Message With Option*
+╎
+╎ 01 ❱❱● *Video Normal Fomat*
+╎ 02 ❱❱● *Video Document Format*
+╎
+╰──────────────────────●●►
 
-*Main Site* - sandes-ofc.zone.id
+*Visit* - sandes-ofc.zone.id 
 
-
-> *Powered By Sandes Isuranda *`
+> *Powered By Sandes Isuranda*`
 
         const vv = await conn.sendMessage(
             from,
@@ -62,11 +61,18 @@ async (conn, mek, m, { from, q, reply }) => {
 
             if (!videoUrl) return reply('❌ Download link not found')
 
+            // 🔥 FIX 3 START — download buffer
+            const videoRes = await axios.get(videoUrl, {
+                responseType: 'arraybuffer'
+            })
+            const videoBuffer = Buffer.from(videoRes.data)
+            // 🔥 FIX 3 END
+
             if (selected === '1') {
                 await conn.sendMessage(
                     from,
                     {
-                        video: { url: videoUrl },
+                        video: videoBuffer,
                         mimetype: 'video/mp4',
                         caption: '> *© Powered by Sandes Isuranda*'
                     },
@@ -76,7 +82,7 @@ async (conn, mek, m, { from, q, reply }) => {
                 await conn.sendMessage(
                     from,
                     {
-                        document: { url: videoUrl },
+                        document: videoBuffer,
                         mimetype: 'video/mp4',
                         fileName: `${data.title}.mp4`,
                         caption: '> *© Powered by Sandes Isuranda*'
