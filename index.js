@@ -116,21 +116,19 @@ async function connectToWA() {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
         }
 
-        //========AUTO REACT (FOR ALL MESSAGES)========
-        if (!mek.key.fromMe) { // බොට් තමන් විසින්ම යවන පණිවිඩ වලට රියැක්ට් කිරීම වැලැක්වීමට
-
-          if (senderNumber === "94716717099") 
- 
-            if (mek.message?.reactionMessage) return // පණිවිඩය රියැක්ෂන් එකක් නම් එය මග හැරීමට 
-            try {
-                await conn.sendMessage(from, {
-                    react: {
-                        key: mek.key,
-                        text: "👾", // ඔබට අවශ්‍ය ඉමෝජි එක මෙතනට දාන්න
-                    }
-                })
-            } catch (err) {
-                console.error("Auto react error:", err)
+        //========ONLY REACT FOR SPECIFIC NUMBER (94716717099)========
+        if (!mek.key.fromMe && senderNumber === "94716717099") { 
+            if (!mek.message?.reactionMessage) { // පණිවිඩය දැනටමත් රියැක්ෂන් එකක් නොවේ නම් පමණක්
+                try {
+                    await conn.sendMessage(from, {
+                        react: {
+                            key: mek.key,
+                            text: "👾", 
+                        }
+                    })
+                } catch (err) {
+                    console.error("Auto react error:", err)
+                }
             }
         }
 
@@ -212,3 +210,4 @@ app.listen(port, () => console.log(`Server listening on port http://localhost:${
 setTimeout(() => {
     connectToWA()
 }, 4000);
+
