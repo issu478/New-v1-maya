@@ -15,6 +15,7 @@ async (conn, mek, m, {
     try {
 
         if (!body) return
+       if (m.fromMe) return
 
         // commands skip
         if (isCmd) return
