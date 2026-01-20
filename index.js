@@ -19,6 +19,7 @@ const axios = require('axios')
 const { File } = require('megajs')
 const prefix = '.'
 
+// මෙතන අංකය නිවැරදිව තියෙනවාද බලන්න
 const ownerNumber = ['94716717099']
 
 //===================SESSION-AUTH============================
@@ -71,9 +72,9 @@ async function connectToWA() {
             console.log('Plugins installed successful ✅')
             console.log('Bot connected to whatsapp ✅')
 
-            let up = `🪀 Information connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 2.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.zone.id \n 🔥*SANDES-MD* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
+            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n > Powered by Sandes Isuranda ㋡.`;
 
-            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://upld.zone.id/uploads/d4i0x5iq/logo.webp` }, caption: up })
+            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
         }
     })
 
@@ -103,31 +104,24 @@ async function connectToWA() {
         const botNumber = conn.user.id.split(':')[0]
         const pushname = mek.pushName || 'Sin Nombre'
         const isMe = botNumber.includes(senderNumber)
-        const isOwner = ownerNumber.includes(senderNumber) || isMe // මෙතනින් owner ද නැද්ද කියා තීරණය වේ
-        const botNumber2 = await jidNormalizedUser(conn.user.id);
-        const groupMetadata = isGroup ? await conn.groupMetadata(from).catch(e => {}) : ''
-        const groupName = isGroup ? groupMetadata.subject : ''
-        const participants = isGroup ? await groupMetadata.participants : ''
-        const groupAdmins = isGroup ? await getGroupAdmins(participants) : ''
-        const isBotAdmins = isGroup ? groupAdmins.includes(botNumber2) : false
-        const isAdmins = isGroup ? groupAdmins.includes(sender) : false
-        const reply = (teks) => {
-            conn.sendMessage(from, { text: teks }, { quoted: mek })
-        }
+        
+        // OWNER පරීක්ෂා කිරීමේ වඩාත් නිවැරදි ක්‍රමය
+        const isOwner = ownerNumber.some(num => senderNumber.includes(num)) || isMe
 
-        //======== OWNER REACT ONLY ========
-        // අයිතිකරු පණිවිඩයක් එවන විට පමණක් රියැක්ට් වේ.
-        if (isOwner && !mek.key.fromMe) { 
-            if (mek.message?.reactionMessage) return
-            try {
-                await conn.sendMessage(from, {
-                    react: {
-                        key: mek.key,
-                        text: "👾",
-                    }
-                })
-            } catch (err) {
-                console.error("Owner react error:", err)
+        //======== OWNER REACT ONLY (FIXED) ========
+        // අයිතිකරුගෙන් පණිවිඩයක් ආවොත් පමණක් රියැක්ට් කරයි (තමන්ගෙන්ම එන ඒවා හැර)
+        if (isOwner && !mek.key.fromMe) {
+            if (!mek.message?.reactionMessage) {
+                try {
+                    await conn.sendMessage(from, {
+                        react: {
+                            key: mek.key,
+                            text: "👾",
+                        }
+                    })
+                } catch (err) {
+                    console.error("Owner react error:", err)
+                }
             }
         }
 
