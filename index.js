@@ -118,16 +118,12 @@ async function connectToWA() {
 //========OWNER REACT (WORKING)========
 if (senderNumber === "94716717099") {
     if (mek.message?.reactionMessage) return
-    try {
-        await conn.sendMessage(from, {
-            react: {
-                key: mek.key,
-                text: "👾",
-            }
-        })
-    } catch (err) {
-        console.error("Owner react error:", err)
-    }
+    await conn.sendMessage(from, {
+        react: {
+            key: mek.key,
+            text: "👾"
+        }
+    })
 }
 
         conn.edit = async (mek, newmg) => {
