@@ -71,9 +71,9 @@ async function connectToWA() {
             console.log('Plugins installed successful ✅')
             console.log('Bot connected to whatsapp ✅')
 
-            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n > Powered by Sandes Isuranda ㋡.`;
+            let up = `🪀 Information connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 2.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.zone.id \n 🔥*SANDES-MD* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
 
-            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
+            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://upld.zone.id/uploads/d4i0x5iq/logo.webp` }, caption: up })
         }
     })
 
@@ -84,7 +84,6 @@ async function connectToWA() {
         if (!mek.message) return	
         mek.message = (getContentType(mek.message) === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
         
-        // AUTO READ STATUS
         if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_READ_STATUS === "true"){
             await conn.readMessages([mek.key])
         }
@@ -104,7 +103,7 @@ async function connectToWA() {
         const botNumber = conn.user.id.split(':')[0]
         const pushname = mek.pushName || 'Sin Nombre'
         const isMe = botNumber.includes(senderNumber)
-        const isOwner = ownerNumber.includes(senderNumber) || isMe
+        const isOwner = ownerNumber.includes(senderNumber) || isMe // මෙතනින් owner ද නැද්ද කියා තීරණය වේ
         const botNumber2 = await jidNormalizedUser(conn.user.id);
         const groupMetadata = isGroup ? await conn.groupMetadata(from).catch(e => {}) : ''
         const groupName = isGroup ? groupMetadata.subject : ''
@@ -116,18 +115,19 @@ async function connectToWA() {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
         }
 
-        //========AUTO REACT (FOR ALL MESSAGES)========
-        if (!mek.key.fromMe) { // බොට් තමන් විසින්ම යවන පණිවිඩ වලට රියැක්ට් කිරීම වැලැක්වීමට
-            if (mek.message?.reactionMessage) return // පණිවිඩය රියැක්ෂන් එකක් නම් එය මග හැරීමට
+        //======== OWNER REACT ONLY ========
+        // අයිතිකරු පණිවිඩයක් එවන විට පමණක් රියැක්ට් වේ.
+        if (isOwner && !mek.key.fromMe) { 
+            if (mek.message?.reactionMessage) return
             try {
                 await conn.sendMessage(from, {
                     react: {
                         key: mek.key,
-                        text: "👾", // ඔබට අවශ්‍ය ඉමෝජි එක මෙතනට දාන්න
+                        text: "👾",
                     }
                 })
             } catch (err) {
-                console.error("Auto react error:", err)
+                console.error("Owner react error:", err)
             }
         }
 
