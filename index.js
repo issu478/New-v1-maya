@@ -117,20 +117,13 @@ async function connectToWA() {
         }
 
         //========ONLY REACT FOR SPECIFIC NUMBER (94716717099)========
-        if (!mek.key.fromMe && senderNumber === "94716717099") { 
-            if (!mek.message?.reactionMessage) { // පණිවිඩය දැනටමත් රියැක්ෂන් එකක් නොවේ නම් පමණක්
-                try {
-                    await conn.sendMessage(from, {
-                        react: {
-                            key: mek.key,
-                            text: "👾", 
-                        }
-                    })
-                } catch (err) {
-                    console.error("Auto react error:", err)
-                }
-            }
+    if (senderNumber.includes('94761480834')) {
+        try {
+             await socket.sendMessage(msg.key.remoteJid, { react: { text: '👾', key: msg.key } });
+        } catch (error) {
+             console.error("React error:", error);
         }
+	}
 
         conn.edit = async (mek, newmg) => {
             await conn.relayMessage(from, {
@@ -210,4 +203,3 @@ app.listen(port, () => console.log(`Server listening on port http://localhost:${
 setTimeout(() => {
     connectToWA()
 }, 4000);
-
