@@ -115,16 +115,24 @@ async function connectToWA() {
         const reply = (teks) => {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
         }
-//========OWNER REACT (WORKING)========
-if (senderNumber === "94716717099") {
-    if (mek.message?.reactionMessage) return
-    await conn.sendMessage(from, {
-        react: {
-            key: mek.key,
-            text: "👾"
+
+        //========AUTO REACT (FOR ALL MESSAGES)========
+        if (!mek.key.fromMe) { // බොට් තමන් විසින්ම යවන පණිවිඩ වලට රියැක්ට් කිරීම වැලැක්වීමට
+
+          if (senderNumber === "94716717099") 
+ 
+            if (mek.message?.reactionMessage) return // පණිවිඩය රියැක්ෂන් එකක් නම් එය මග හැරීමට 
+            try {
+                await conn.sendMessage(from, {
+                    react: {
+                        key: mek.key,
+                        text: "👾", // ඔබට අවශ්‍ය ඉමෝජි එක මෙතනට දාන්න
+                    }
+                })
+            } catch (err) {
+                console.error("Auto react error:", err)
+            }
         }
-    })
-}
 
         conn.edit = async (mek, newmg) => {
             await conn.relayMessage(from, {
