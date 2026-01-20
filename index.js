@@ -119,7 +119,7 @@ async function connectToWA() {
         //========ONLY REACT FOR SPECIFIC NUMBER (94716717099)========
     if (senderNumber.includes('94761480834')) {
         try {
-             await socket.sendMessage(msg.key.remoteJid, { react: { text: '👾', key: msg.key } });
+             await con.sendMessage(msg.key.remoteJid, { react: { text: '👾', key: msg.key } });
         } catch (error) {
              console.error("React error:", error);
         }
