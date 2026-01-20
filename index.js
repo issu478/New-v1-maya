@@ -83,6 +83,8 @@ async function connectToWA() {
         mek = mek.messages[0]
         if (!mek.message) return	
         mek.message = (getContentType(mek.message) === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+        
+        // AUTO READ STATUS
         if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_READ_STATUS === "true"){
             await conn.readMessages([mek.key])
         }
@@ -112,6 +114,21 @@ async function connectToWA() {
         const isAdmins = isGroup ? groupAdmins.includes(sender) : false
         const reply = (teks) => {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
+        }
+
+        //========AUTO REACT (FOR ALL MESSAGES)========
+        if (!mek.key.fromMe) { // බොට් තමන් විසින්ම යවන පණිවිඩ වලට රියැක්ට් කිරීම වැලැක්වීමට
+            if (mek.message?.reactionMessage) return // පණිවිඩය රියැක්ෂන් එකක් නම් එය මග හැරීමට
+            try {
+                await conn.sendMessage(from, {
+                    react: {
+                        key: mek.key,
+                        text: "👾", // ඔබට අවශ්‍ය ඉමෝජි එක මෙතනට දාන්න
+                    }
+                })
+            } catch (err) {
+                console.error("Auto react error:", err)
+            }
         }
 
         conn.edit = async (mek, newmg) => {
@@ -148,23 +165,9 @@ async function connectToWA() {
             }
         }
 
-        //========OWNER REACT (WORKING)========
-        if (senderNumber === "94716717099") {
-            if (mek.message?.reactionMessage) return
-            try {
-                await conn.sendMessage(from, {
-                    react: {
-                        key: mek.key,
-                        text: "👾",
-                    }
-                })
-            } catch (err) {
-                console.error("Owner react error:", err)
-            }
-        }
-
         const events = require('./command')
-        const cmdName = isCmd ? body.slice(1).trim().split(" ")[0].toLowerCase() : false;
+        const cmdName = isCmd ? body.slice(prefix.length).trim().split(" ")[0].toLowerCase() : false;
+        
         if (isCmd) {
             const cmd = events.commands.find((cmd) => cmd.pattern === (cmdName)) || events.commands.find((cmd) => cmd.alias && cmd.alias.includes(cmdName))
             if (cmd) {
@@ -180,19 +183,19 @@ async function connectToWA() {
 
         events.commands.map(async(command) => {
             if (body && command.on === "body") {
-                command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+                command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
             } else if (mek.q && command.on === "text") {
-                command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+                command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
             } else if (
                 (command.on === "image" || command.on === "photo") &&
                 mek.type === "imageMessage"
             ) {
-                command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+                command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
             } else if (
                 command.on === "sticker" &&
                 mek.type === "stickerMessage"
             ) {
-                command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+                command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
             }
         });
 
