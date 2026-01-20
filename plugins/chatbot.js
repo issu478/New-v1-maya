@@ -3,7 +3,7 @@ const { fetchJson } = require('../lib/functions')
 
 const OWNER = "94716717099"
 
-// chatbot state (memory)
+// chatbot state
 let CHATBOT_ENABLED = true
 
 cmd({
@@ -23,28 +23,24 @@ async (conn, mek, m, {
         const textLower = body.toLowerCase().trim()
 
         // ================= CHATBOT ON / OFF =================
-        if (textLower === 'chatbot off') {
+        if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
             return reply('🤖 Chat bot is now *OFF*')
         }
 
-        if (textLower === 'chatbot on') {
+        if (textLower === 'chat bot on') {
             CHATBOT_ENABLED = true
             return reply('🤖 Chat bot is now *ON*')
         }
         // ====================================================
 
-        // chatbot off state
-        if (!CHATBOT_ENABLED) {
-            // custom prompt / reply when off
-            return reply('🚫 Chat bot is currently OFF.\nType *chat bot on* to enable.')
-        }
+        // chatbot off = do nothing (silent)
+        if (!CHATBOT_ENABLED) return
 
         // commands skip
         if (isCmd) return
         if (/^[./!#]/.test(body)) return
 
-        // API text
         let text = body
 
         // owner respect prompt
