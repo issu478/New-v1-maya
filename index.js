@@ -17,7 +17,7 @@ const util = require('util')
 const { sms, downloadMediaMessage } = require('./lib/msg')
 const axios = require('axios')
 const { File } = require('megajs')
-const prefix = '.'
+const prefix = '-'
 
 const ownerNumber = ['94716717099']
 
@@ -73,7 +73,7 @@ async function connectToWA() {
 
             let up = `SANDES MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 2.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.zone.id \n 🔥 A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
 
-            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
+            conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://upld.zone.id/uploads/d4i0x5iq/logo.webp` }, caption: up })
         }
     })
 
@@ -122,7 +122,7 @@ if (!mek.key.fromMe && senderNumber === "94716717099") {
                     await conn.sendMessage(from, {
                         react: {
                             key: mek.key,
-                            text: "👾", 
+                            text: "👨‍💻", 
                         }
                     })
                 } catch (err) {
