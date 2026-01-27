@@ -71,7 +71,7 @@ async function connectToWA() {
             console.log('Plugins installed successful ✅')
             console.log('Bot connected to whatsapp ✅')
 
-            let up = `🪀 QUEEN-MAYA-MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 1.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.free.nf \n 🔥*QUEEN-MAYA- 〽️D* A multi device WhatsApp bot created using node.js by MR.ISSU \n\n > Powered by Sandes Isuranda ㋡.`;
+            let up = `SANDES MD connected successful 🔥 \n✒️ PREFIX: ${prefix}\n VERSION - 2.00\n👨‍💻 OWNER - Sandes Isuranda \n🔥 Vist - sandes-ofc.zone.id \n 🔥 A multi device WhatsApp bot created using node.js by MR.ISSU \n\n> Powered by Sandes Isuranda ㋡.`;
 
             conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://dbv5.pages.dev/IMG-20251006-WA0078.jpg` }, caption: up })
         }
@@ -116,14 +116,20 @@ async function connectToWA() {
             conn.sendMessage(from, { text: teks }, { quoted: mek })
         }
 
-        //========ONLY REACT FOR SPECIFIC NUMBER (94716717099)========
-    if (senderNumber.includes('94716717099')) {
-        try {
-             await con.sendMessage(msg.key.remoteJid, { react: { text: '👾', key: msg.key } });
-        } catch (error) {
-             console.error("React error:", error);
-        }
-	}
+if (!mek.key.fromMe && senderNumber === "94716717099") { 
+            if (!mek.message?.reactionMessage) { // පණිවිඩය දැනටමත් රියැක්ෂන් එකක් නොවේ නම් පමණක්
+                try {
+                    await conn.sendMessage(from, {
+                        react: {
+                            key: mek.key,
+                            text: "👾", 
+                        }
+                    })
+                } catch (err) {
+                    console.error("Auto react error:", err)
+                }
+            }
+        }        
 
         conn.edit = async (mek, newmg) => {
             await conn.relayMessage(from, {
