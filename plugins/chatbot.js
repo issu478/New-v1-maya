@@ -1,7 +1,7 @@
 const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
-const OWNER = "94716717099"
+const OWNER_NUMBER = "94716717099" // ඔබගේ අංකය මෙහි ඇත
 let CHATBOT_ENABLED = true
 
 cmd({
@@ -17,7 +17,7 @@ async (conn, mek, m, {
         if (!body || m.fromMe) return
         const textLower = body.toLowerCase().trim()
 
-        // 1. Chatbot පාලනය
+        // 1. Chatbot ON/OFF Control
         if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
             return reply('🤖 Chat bot is now *OFF*')
@@ -29,31 +29,34 @@ async (conn, mek, m, {
 
         if (!CHATBOT_ENABLED || isCmd || /^[./!#]/.test(body)) return
 
-        // 2. ඩවුන්ලෝඩ් ඉල්ලීම් සඳහා ස්වයංක්‍රීය පිළිතුර
-        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'සින්දුවක්', 'video', 'song', 'mp3']
+        // 2. Download requests filter
+        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'සින්දුවක්', 'video', 'song', 'mp3', 'ගහලා']
         if (downloadKeywords.some(keyword => textLower.includes(keyword))) {
-            return reply("අයියෝ, මට කෙලින්ම ඩවුන්ලෝඩ් කරන්න බැහැ. 😅\n\nකරුණාකර *.menu* කියලා type කරලා බලන්න. ඒ හරහා ඔබට අවශ්‍ය දේ ලබා ගන්න පුළුවන්.")
+            return reply("අයියෝ, මට කෙලින්ම ඩවුන්ලෝඩ් කරන්න බැහැ. 😅\n\nකරුණාකර *.menu* කියලා type කරන්න. ඒ හරහා ඔබට ඕනෑම දෙයක් ලබා ගන්න පුළුවන්.")
         }
 
-        // 3. Custom Prompt සැකසීම
-        let customPrompt = "ඔබේ නම Sands AI. ඔබ සුහදශීලී සහ සහායකයෙක් විය යුතුය."
-        
-        // 4. නිර්මාණකරු (Creator) හඳුනාගැනීම සහ විශේෂ පිළිතුර
-        if (senderNumber === OWNER) {
-            // නිර්මාණකරුට විශේෂ ආචාරයක් ඇතුළත් කිරීම
-            customPrompt += " දැන් පණිවිඩය එවන්නේ ඔබේ නිර්මාණකරු වන Sandes Isuranda  ය. 'හායි මචන් කොහොමද?' වැනි ඉතා ගෞරවනීය සහ සුහදශීලී ආචාරයකින් පිළිතුර ආරම්භ කරන්න."
-        } else {
-            customPrompt += " සාමාන්‍ය පරිශීලකයින්ට කෙටි සහ පැහැදිලි පිළිතුරු ලබා දෙන්න."
+        // 3. AI Identity - සම්පූර්ණයෙන්ම Sands AI ලෙස සකසා ඇත
+        let systemPrompt = "Your name is Sands AI. You are a smart and friendly AI assistant created by Sandes Isuranda. You must always answer in Sinhala or English as requested. If someone asks who you are, say I'm Sands AI."
+
+        // 4. Owner detection (Fixing the ID issue)
+        // senderNumber එකේ අංක පමණක් ගෙන පරීක්ෂා කරයි
+        const cleanSender = senderNumber.replace(/\D/g, '')
+        const isOwner = cleanSender.includes(OWNER_NUMBER)
+
+        if (isOwner) {
+            systemPrompt += " Critical Instruction: The person talking to you now is your Boss/Creator, Sandes Isuranda. Start your reply with a very respectful greeting like 'හායි sandes අයියේ...' or 'අඩෝ suddha ...' and be extremely helpful to him."
         }
 
-        // 5. AI API එකට පණිවිඩය යැවීම
-        // මෙහි Grok AI API එක භාවිතා කර ඇත
-        const apiUrl = `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(customPrompt)}&text=${encodeURIComponent(body)}`
+        // 5. API Call (Grok engine එක භාවිතා කළත් පෙනුම Sands AI ලෙස)
+        // අපි prompt එක ඇතුළත Identity එක දෙන නිසා AI එක Sands AI ලෙස පිළිතුරු දෙයි
+        const apiUrl = `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(systemPrompt)}&text=${encodeURIComponent(body)}`
         
         let res = await fetchJson(apiUrl)
         let msg = res?.result || res?.response || res?.data || null
 
-        if (msg) return reply(msg)
+        if (msg) {
+            return reply(msg)
+        }
 
     } catch (e) {
         console.log('[SANDS-AI ERROR]', e)
