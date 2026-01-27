@@ -33,16 +33,16 @@ async (conn, mek, m, { from, reply, q }) => {
         const caption = `
 ╭───────────────────────●●►
 │ *SANDES MD SONG DOWNLOADER*
-╰───────────────────●●►
+╰───────────────────────●●►
 │ 🎵 *Title:* ${video.title}
 │ ⏱ *Duration:* ${video.timestamp}
 │ 👀 *Views:* ${video.views}
 │
 │ *Reply The Number bellow*
 │
-│ *1 ❱❱● Voice Note*
-│ *2 ❱❱● Normal Audio*
-│ *3 ❱❱● Document*
+│ *1 ❱❱● Audio* 
+│ *2 ❱❱● Document*
+│ *3 ❱❱● Voice*
 ╰─────────────────────────●●►     
 > Powered by Sandes Isuranda`
 
@@ -67,17 +67,17 @@ async (conn, mek, m, { from, reply, q }) => {
                     await conn.sendMessage(from, {
                         audio: { url: dlUrl },
                         mimetype: 'audio/mpeg',
-                        ptt: true
-                    }, { quoted: m2 })
-
-                } else if (text === '2') {
-                    // 🎧 Normal Audio
-                    await conn.sendMessage(from, {
-                        audio: { url: dlUrl },
-                        mimetype: 'audio/mpeg'
                     }, { quoted: m2 })
 
                 } else if (text === '3') {
+                    // 🎧 Normal Audio
+                    await conn.sendMessage(from, {
+                        audio: { url: dlUrl },
+                        mimetype: 'audio/ogg;codecs=opus'
+                        ptt: ture 
+                    }, { quoted: m2 })
+
+                } else if (text === '2') {
                     // 📁 Document
                     await conn.sendMessage(from, {
                         document: { url: dlUrl },
