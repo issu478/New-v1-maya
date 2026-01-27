@@ -2,7 +2,7 @@ const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
 const OWNER_NUMBER = "94716717099"
-let CHATBOT_ENABLED = true
+let CHATBOT_ENABLED = false 
 
 cmd({ on: "body" }, async (conn, mek, m, {
     body,
@@ -73,6 +73,7 @@ or
         msg = msg
             .replace(/grok ai/gi, 'Sands AI')
             .replace(/grok/gi, 'Sands AI')
+            .replace(/xAI/gi, 'Sandes Isuranda') 
             .replace(/openai/gi, '')
             .trim()
 
