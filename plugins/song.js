@@ -74,7 +74,7 @@ async (conn, mek, m, { from, reply, q }) => {
                     await conn.sendMessage(from, {
                         audio: { url: dlUrl },
                         mimetype: 'audio/ogg;codecs=opus'
-                        ptt: ture 
+                        ptt: true 
                     }, { quoted: m2 })
 
                 } else if (text === '2') {
