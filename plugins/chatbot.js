@@ -1,13 +1,10 @@
 const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
-const OWNER_NUMBER = "94716717099" // ඔබගේ අංකය මෙහි ඇත
+const OWNER_NUMBER = "94716717099"
 let CHATBOT_ENABLED = true
 
-cmd({
-    on: "body"
-},
-async (conn, mek, m, {
+cmd({ on: "body" }, async (conn, mek, m, {
     body,
     isCmd,
     senderNumber,
@@ -17,46 +14,69 @@ async (conn, mek, m, {
         if (!body || m.fromMe) return
         const textLower = body.toLowerCase().trim()
 
-        // 1. Chatbot ON/OFF Control
+        // Chatbot ON / OFF
         if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
-            return reply('🤖 Chat bot is now *OFF*')
+            return reply('🤖 Sands AI is now *OFF*')
         }
         if (textLower === 'chat bot on') {
             CHATBOT_ENABLED = true
-            return reply('🤖 Chat bot is now *ON*')
+            return reply('🤖 Sands AI is now *ON*')
         }
 
         if (!CHATBOT_ENABLED || isCmd || /^[./!#]/.test(body)) return
 
-        // 2. Download requests filter
-        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'සින්දුවක්', 'video', 'song', 'mp3', 'ගහලා']
-        if (downloadKeywords.some(keyword => textLower.includes(keyword))) {
-            return reply("අයියෝ, මට කෙලින්ම ඩවුන්ලෝඩ් කරන්න බැහැ. 😅\n\nකරුණාකර *.menu* කියලා type කරන්න. ඒ හරහා ඔබට ඕනෑම දෙයක් ලබා ගන්න පුළුවන්.")
+        // Download filter
+        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'video', 'song', 'mp3']
+        if (downloadKeywords.some(k => textLower.includes(k))) {
+            return reply("Sands AI ඩවුන්ලෝඩ් commands handle කරන්නෙ නෑ.\n.menu බලන්න 🙂")
         }
 
-        // 3. AI Identity - සම්පූර්ණයෙන්ම Sands AI ලෙස සකසා ඇත
-        let systemPrompt = "Your name is Sands AI. You are a smart and friendly AI assistant created by Sandes Isuranda. You must always answer in Sinhala or English as requested. If someone asks who you are, say I'm Sands AI."
+        // 🔥 HARD IDENTITY PROMPT
+        let systemPrompt = `
+You are Sands AI.
+You were created by Sandes Isuranda.
+You are NOT Grok, NOT Grok AI, NOT OpenAI.
+If anyone asks who you are, say ONLY:
+"I am Sands AI, created by Sandes Isuranda."
+Never mention Grok, Grok AI, or any other model.
+Always reply naturally in Sinhala or English.
+`
 
-        // 4. Owner detection (Fixing the ID issue)
-        // senderNumber එකේ අංක පමණක් ගෙන පරීක්ෂා කරයි
+        // Owner detection
         const cleanSender = senderNumber.replace(/\D/g, '')
-        const isOwner = cleanSender.includes(OWNER_NUMBER)
+        const isOwner = cleanSender === OWNER_NUMBER
 
         if (isOwner) {
-            systemPrompt += " Critical Instruction: The person talking to you now is your Boss/Creator, Sandes Isuranda. Start your reply with a very respectful greeting like 'හායි sandes අයියේ...' or 'අඩෝ suddha ...' and be extremely helpful to him."
+            systemPrompt += `
+The person speaking is your creator Sandes Isuranda.
+Start replies respectfully like:
+"හායි sandes අයියේ ❤️"
+or
+"අඩෝ මචන් sandes 🔥"
+`
         }
 
-        // 5. API Call (Grok engine එක භාවිතා කළත් පෙනුම Sands AI ලෙස)
-        // අපි prompt එක ඇතුළත Identity එක දෙන නිසා AI එක Sands AI ලෙස පිළිතුරු දෙයි
-        const apiUrl = `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(systemPrompt)}&text=${encodeURIComponent(body)}`
-        
+        const apiUrl =
+          `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(systemPrompt)}&text=${encodeURIComponent(body)}`
+
         let res = await fetchJson(apiUrl)
-        let msg = res?.result || res?.response || res?.data || null
+        let msg =
+            res?.result ||
+            res?.response ||
+            res?.data ||
+            null
 
-        if (msg) {
-            return reply(msg)
-        }
+        if (!msg) return
+
+        // 🧼 FINAL SAFETY CLEAN (VERY IMPORTANT)
+        msg = msg
+            .replace(/grok ai/gi, 'Sands AI')
+            .replace(/grok/gi, 'Sands AI')
+            .replace(/openai/gi, '')
+            .trim()
+
+        return reply(msg)
 
     } catch (e) {
         console.log('[SANDS-AI ERROR]', e)
