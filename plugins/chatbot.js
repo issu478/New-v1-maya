@@ -2,8 +2,6 @@ const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
 const OWNER = "94716717099"
-
-// chatbot state
 let CHATBOT_ENABLED = true
 
 cmd({
@@ -16,53 +14,48 @@ async (conn, mek, m, {
     reply
 }) => {
     try {
-
-        if (!body) return
-        if (m.fromMe) return
-
+        if (!body || m.fromMe) return
         const textLower = body.toLowerCase().trim()
 
-        // ================= CHATBOT ON / OFF =================
+        // 1. Chatbot පාලනය
         if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
             return reply('🤖 Chat bot is now *OFF*')
         }
-
         if (textLower === 'chat bot on') {
             CHATBOT_ENABLED = true
             return reply('🤖 Chat bot is now *ON*')
         }
-        // ====================================================
 
-        // chatbot off = do nothing (silent)
-        if (!CHATBOT_ENABLED) return
+        if (!CHATBOT_ENABLED || isCmd || /^[./!#]/.test(body)) return
 
-        // commands skip
-        if (isCmd) return
-        if (/^[./!#]/.test(body)) return
-
-        let text = body
-
-        // owner respect prompt
-        if (senderNumber === OWNER) {
-            text = `This message is from my creator Sandes Isuranda. Reply with extra respect.\n\n${body}`
+        // 2. ඩවුන්ලෝඩ් ඉල්ලීම් සඳහා ස්වයංක්‍රීය පිළිතුර
+        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'සින්දුවක්', 'video', 'song', 'mp3']
+        if (downloadKeywords.some(keyword => textLower.includes(keyword))) {
+            return reply("අයියෝ, මට කෙලින්ම ඩවුන්ලෝඩ් කරන්න බැහැ. 😅\n\nකරුණාකර *.menu* කියලා type කරලා බලන්න. ඒ හරහා ඔබට අවශ්‍ය දේ ලබා ගන්න පුළුවන්.")
         }
 
-        let res = await fetchJson(
-            `https://api.nekolabs.web.id/text.gen/grok/3-mini?text=${encodeURIComponent(text)}`
-        )
+        // 3. Custom Prompt සැකසීම
+        let customPrompt = "ඔබේ නම Sands AI. ඔබ සුහදශීලී සහ සහායකයෙක් විය යුතුය."
+        
+        // 4. නිර්මාණකරු (Creator) හඳුනාගැනීම සහ විශේෂ පිළිතුර
+        if (senderNumber === OWNER) {
+            // නිර්මාණකරුට විශේෂ ආචාරයක් ඇතුළත් කිරීම
+            customPrompt += " දැන් පණිවිඩය එවන්නේ ඔබේ නිර්මාණකරු වන Sandes Isuranda  ය. 'හායි මචන් කොහොමද?' වැනි ඉතා ගෞරවනීය සහ සුහදශීලී ආචාරයකින් පිළිතුර ආරම්භ කරන්න."
+        } else {
+            customPrompt += " සාමාන්‍ය පරිශීලකයින්ට කෙටි සහ පැහැදිලි පිළිතුරු ලබා දෙන්න."
+        }
 
-        let msg =
-            res?.result ||
-            res?.response ||
-            res?.data ||
-            null
+        // 5. AI API එකට පණිවිඩය යැවීම
+        // මෙහි Grok AI API එක භාවිතා කර ඇත
+        const apiUrl = `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(customPrompt)}&text=${encodeURIComponent(body)}`
+        
+        let res = await fetchJson(apiUrl)
+        let msg = res?.result || res?.response || res?.data || null
 
-        if (!msg) return
-
-        return reply(msg)
+        if (msg) return reply(msg)
 
     } catch (e) {
-        console.log('[AUTO-AI ERROR]', e)
+        console.log('[SANDS-AI ERROR]', e)
     }
 })
