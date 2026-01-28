@@ -23,7 +23,7 @@ try {
     await sleep(500)
 
     await conn.sendMessage(from, {
-        audio: { url: "https://www.movanest.xyz/Jr0juj.mpeg" },
+        audio: { url: "https://saviya-kolla-database.vercel.app/AUDIO/1769602714131_d5higo.mp3" },
         mimetype: "audio/mpeg",
         ptt: false
     }, { quoted: mek })
@@ -31,9 +31,9 @@ try {
     await sleep(500)
 
     let aliveText = `
-👋 Hello *${pushname}* 🌸  
+👋 Hello *${pushname}* 🌸 
 
-*HEELO USER I'M ALIVE NOW🔥* 
+*I'M ALIVE NOW🔥* 
 
 ╔══════════════════════❏
 ║🟢 Status : *Online & Stable*
@@ -44,7 +44,7 @@ try {
 ║👨‍💻 Developer : Sandes Isuranda 
 ╚══════════════════════❏
 
-✨ _I'm alive & ready to serve you_
+✨ _I'm alive & ready to serve you_ 
 
 Type *.menu* to view commands 📂  
 
@@ -85,7 +85,7 @@ try {
 
  🫟 *Welcome to SANDES MD* 
 
-*╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ 」──●●►*
+*╭─「 ʙᴏᴛ ᴅᴇᴛᴀɪʟꜱ 」──❖❖►*
 *│* 👤 User = ${pushname} 
 *│* ⏰ Run time = ${runtime(process.uptime())}
 *│* 🧬 Version = V 02
@@ -93,7 +93,7 @@ try {
 *│* 👾 Bot = SANDES MD
 *│* ☎️ Owner = 94716717099
 *│* ✒️ Prefix = .
-*╰──────────●●►*
+*╰──────────────❖❖►*
 
 🔢 *_Reply The Number Below_* 🔥
 
@@ -102,7 +102,8 @@ try {
 *🔶 03* ❱❱⦁ Owner Menu 
 *🔶 04* ❱❱⦁ Search Menu
 *🔶 05* ❱❱⦁ Main Menu
-*🔶 06* ❱❱⦁ Fun Menu
+*🔶 06* ❱❱⦁ Fun Menu 
+*🔶 07* ❱❱⦁ Auto Menu
 
 > Powered by Sandes Isuranda ㋡
 `
@@ -305,6 +306,31 @@ try {
                 }, { quoted: msg })
             }
 
+            if (text === "1" || text === "01") {
+                return conn.sendMessage(fromUser, {
+                    image: { url: menuImage },
+                    caption: `
+👋 𝙷𝙴𝙻𝙻𝙾𝚆 ${pushname} 
+ 
+🎀 *Commands Menu* 🎀
+
+*╭───「 Main Commands 」──●●►* 
+*╎* 
+*╎*   🫟 Command - .chatbot 
+*╎* 🔖 Usage - Auto AI System
+*╎*   🫟 Command - .ai
+*╎* 🔖 Usage - Chat with Ai
+*╎* 
+*╎* Total Commands - 2
+*╰───────────────────●●►* 
+
+
+> *Powered By Sandes Isuranda ㋡* 
+`
+                }, { quoted: msg })
+            }
+
+  
             await conn.sendMessage(fromUser, {
                 text: "❌ Invalid option! Reply only 01 - 06"
             }, { quoted: msg })
