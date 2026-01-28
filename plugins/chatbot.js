@@ -1,97 +1,56 @@
 const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
-const OWNER_NUMBER = "94716717099"
-let CHATBOT_ENABLED = false
+let CHATBOT_ENABLED = true // Default ON කරලා තියෙන්නෙ
 
 cmd({ on: "body" }, async (conn, mek, m, {
     body,
     isCmd,
-    senderNumber,
     reply
 }) => {
     try {
-        if (!body || m.fromMe) return
+        // අත්‍යවශ්‍ය නොවන අවස්ථා මගහැරීම
+        if (!body || m.fromMe || isCmd || /^[./!#]/.test(body)) return
 
+        // Chatbot ON/OFF පාලනය පමණක් තබා ගනිමු
         const textLower = body.toLowerCase().trim()
-
-        // Chatbot ON / OFF
         if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
-            return reply('🤖 Sands AI is now *OFF*')
+            return reply('🤖 Chatbot is now *OFF*')
         }
-
         if (textLower === 'chat bot on') {
             CHATBOT_ENABLED = true
-            return reply('🤖 Sands AI is now *ON*')
+            return reply('🤖 Chatbot is now *ON*')
         }
 
-        // skip if disabled or command
-        if (!CHATBOT_ENABLED || isCmd || /^[./!#]/.test(body)) return
+        // Chatbot disable නම් මෙතනින් නවතින්න
+        if (!CHATBOT_ENABLED) return
 
-        // download related filter
-        const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'video', 'song', 'mp3']
-        if (downloadKeywords.some(k => textLower.includes(k))) {
-            return reply(
-                "Sands AI ඩවුන්ලෝඩ් commands handle කරන්නෙ නෑ.\n.menu බලන්න 🙂"
-            )
-        }
-
-        // typing indicator
+        // Typing indicator පෙන්වීම
         await conn.sendPresenceUpdate('composing', m.chat)
 
-        // SAFE sender detect (NO CRASH)
-        const senderNum =
-            senderNumber ||
-            m.sender ||
-            mek.key?.participant ||
-            mek.key?.remoteJid ||
-            ''
-
-        const cleanSender = senderNum.replace(/\D/g, '')
-        const isOwner = cleanSender === OWNER_NUMBER
-
-        // 🔥 API CALL (USER MESSAGE ONLY)
-        const apiUrl =
-            `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(body)}`
+        // API CALL - මෙතනට ඔයාගේ වැඩ කරන API URL එක දාන්න
+        // මම මෙතන demo එකක් විදිහට එකක් දාලා තියෙනවා
+        const apiUrl = `https://api.giftedtech.my.id/api/ai/gpt4?apikey=gifted&q=${encodeURIComponent(body)}`
 
         let res = await fetchJson(apiUrl)
 
-        // SAFE response extract
-        let msg =
-            res?.result ||
-            res?.response ||
-            res?.data ||
-            res?.reply ||
-            ''
+        // API එකෙන් එන response එක ග්‍රහණය කරගැනීම (Result field එක බලන්න)
+        let msg = res?.result || res?.response || res?.data || ''
 
-        if (typeof msg !== 'string' || !msg.trim()) {
+        if (!msg) {
             await conn.sendPresenceUpdate('paused', m.chat)
-            return reply('⚠️ Sands AI response empty. Try again.')
+            return // Response එකක් නැත්නම් reply කරන්නේ නැත
         }
 
-        // clean branding
-        let finalMsg = msg
-            .replace(/OpenAI/gi, 'Sands AI')
-            .replace(/Grok/gi, 'Sands AI')
-            .replace(/xAI/gi, 'Sandes Isuranda')
-            .trim()
-
-        // owner respect (NON-API LEVEL)
-        if (isOwner) {
-            finalMsg = `👨‍💻\n\n${finalMsg}`
-        }
-
-        // send reply
-        await reply(finalMsg)
-
-        // stop typing
+        // කිසිදු branding එකක් නැතිව කෙලින්ම response එක යැවීම
+        await reply(msg.trim())
+        
+        // Typing නවත්වන්න
         await conn.sendPresenceUpdate('paused', m.chat)
 
     } catch (e) {
-        console.log('[SANDS-AI ERROR]', e)
-        try {
-            await conn.sendPresenceUpdate('paused', m.chat)
-        } catch {}
+        console.error('[CHATBOT ERROR]', e)
+        await conn.sendPresenceUpdate('paused', m.chat)
     }
 })
