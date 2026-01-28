@@ -306,7 +306,7 @@ try {
                 }, { quoted: msg })
             }
 
-            if (text === "1" || text === "01") {
+            if (text === "7" || text === "07") {
                 return conn.sendMessage(fromUser, {
                     image: { url: menuImage },
                     caption: `
@@ -332,7 +332,7 @@ try {
 
   
             await conn.sendMessage(fromUser, {
-                text: "❌ Invalid option! Reply only 01 - 06"
+                text: "❌ Invalid option! Reply only 01 - 07"
             }, { quoted: msg })
 
         } catch (err) {
