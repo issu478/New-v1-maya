@@ -58,7 +58,7 @@ or
         }
 
         const apiUrl =
-          `https://api.nekolabs.web.id/text.gen/grok/3-mini?prompt=${encodeURIComponent(systemPrompt)}&text=${encodeURIComponent(body)}`
+          `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(systemPrompt)}&text=${encodeURIComponent(body)}`
 
         let res = await fetchJson(apiUrl)
         let msg =
@@ -71,7 +71,7 @@ or
 
         // 🧼 FINAL SAFETY CLEAN (VERY IMPORTANT)
         msg = msg
-            .replace(/grok ai/gi, 'Sands AI')
+            .replace(/Open AI/gi, 'Sands AI')
             .replace(/grok/gi, 'Sands AI')
             .replace(/xAI/gi, 'Sandes Isuranda') 
             .replace(/openai/gi, '')
