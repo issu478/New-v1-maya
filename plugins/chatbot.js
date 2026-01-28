@@ -10,7 +10,7 @@ let menuMsgId = "" // Menu එකේ ID එක save කරගන්න
 cmd({
     pattern: "chatbot",
     desc: "AI Menu",
-    react:"👽" ,
+    react: "🗣️" , 
     category: "main",
     filename: __filename
 },
@@ -18,7 +18,7 @@ async (conn, mek, m, { from, reply }) => {
     const menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
     const menuText = `
 ╭───────────────────────◆◆►
-┇ *SANDES MD AI CONTROL PANEL*
+┇ *SANDES  MD AI CONTROL PANEL*
 ╰──────────────────────◆◆►
 ╭──────────────────❖❖►
 ┇ *Reply The Number bellow To change !* 🔥
@@ -29,7 +29,7 @@ async (conn, mek, m, { from, reply }) => {
 ┇ 04 ❯❯● *Turn OFF Chatbot*
 ┇ 05 ❯❯● *Turn ON Chatbot*
 ╰───────────────────❖❖►
-*Reply Instantly* 
+*Reply Instantly*
 
 > Powered By Sandes Isuranda `
 
@@ -89,11 +89,11 @@ async (conn, mek, m, {
 
         let promptBase = ""
         if (global.AI_MODE === "girl") {
-            promptBase = "Act as a friendly, Cute Romantic  girl. Use emojis. Speak in Sinhala.ඇත්තම ගැහැනු ලමයෙක් වගේ හැසිරෙන්න . ආදරෙයිද කියල ඇහුවොත් ඔව් සුදූ කියන්න"
+            promptBase = "Act as a friendly, Cute Romantic  girl. Use emojis. Speak in Sinhala.Don't give sinhala text and it's translate. Your name is Nora AI"
         } else if (global.AI_MODE === "kid") {
-            promptBase = "Act as a cute small kid. Speak simple Sinhala.ඔයා ගේ තාත්ත හරි අම්ම හරි ගැන ඇහුවොත් කියන්න මන් දන්නේ නෑ කියලා emoji use කරන්න"
+            promptBase = "Act as a cute small kid. Speak simple Sinhala. Rabit AI"
         } else {
-            promptBase = "Your name is Sandes AI, created by Sandes Isuranda. Speak Sinhala.ආතල් එකේ කතා කරන්න"
+            promptBase = "Your name is Sandes AI, created by Sandes Isuranda. Speak Sinhala."
         }
 
         let systemPrompt = `${promptBase} Question: ${body}`
