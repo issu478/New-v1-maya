@@ -2,7 +2,7 @@ const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
 const OWNER_NUMBER = "94716717099"
-let CHATBOT_ENABLED = false 
+let CHATBOT_ENABLED = false
 
 cmd({ on: "body" }, async (conn, mek, m, {
     body,
@@ -12,63 +12,90 @@ cmd({ on: "body" }, async (conn, mek, m, {
 }) => {
     try {
         if (!body || m.fromMe) return
+
         const textLower = body.toLowerCase().trim()
 
-        // Chatbot Control
+        // Chatbot ON / OFF
         if (textLower === 'chat bot off') {
             CHATBOT_ENABLED = false
             return reply('🤖 Sands AI is now *OFF*')
         }
+
         if (textLower === 'chat bot on') {
             CHATBOT_ENABLED = true
             return reply('🤖 Sands AI is now *ON*')
         }
 
+        // skip if disabled or command
         if (!CHATBOT_ENABLED || isCmd || /^[./!#]/.test(body)) return
 
-        // Download filter
+        // download related filter
         const downloadKeywords = ['download', 'ඩවුන්ලෝඩ්', 'video', 'song', 'mp3']
         if (downloadKeywords.some(k => textLower.includes(k))) {
-            return reply("Sands AI ඩවුන්ලෝඩ් commands handle කරන්නෙ නෑ.\n.menu බලන්න 🙂")
+            return reply(
+                "Sands AI ඩවුන්ලෝඩ් commands handle කරන්නෙ නෑ.\n.menu බලන්න 🙂"
+            )
         }
 
-        // Typing Status - මෙතනින් typing පෙන්නන්න පටන් ගන්නවා
+        // typing indicator
         await conn.sendPresenceUpdate('composing', m.chat)
 
-        // System Prompt logic
-        let systemPrompt = `You are Sands AI, created by Sandes Isuranda. Reply naturally in Sinhala or English.`
-        const cleanSender = senderNumber.replace(/\D/g, '')
+        // SAFE sender detect (NO CRASH)
+        const senderNum =
+            senderNumber ||
+            m.sender ||
+            mek.key?.participant ||
+            mek.key?.remoteJid ||
+            ''
+
+        const cleanSender = senderNum.replace(/\D/g, '')
         const isOwner = cleanSender === OWNER_NUMBER
-        
-        let ownerGreeting = isOwner ? `The person is your creator Sandes. Be very friendly and respectful.` : ""
-        const finalQuery = `${systemPrompt} ${ownerGreeting} User: ${body}`
 
-        // API Call
-        const apiUrl = `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(finalQuery)}`
+        // system prompt
+        let systemPrompt =
+            "You are Sands AI, created by Sandes Isuranda. Reply naturally in Sinhala or English."
+
+        let ownerGreeting = isOwner
+            ? "The person is your creator Sandes. Be very friendly and respectful."
+            : ""
+
+        const finalQuery = `${systemPrompt}\n${ownerGreeting}\nUser: ${body}`
+
+        // API CALL
+        const apiUrl =
+            `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(finalQuery)}`
+
         let res = await fetchJson(apiUrl)
-        
-        let msg = res?.result || res?.response || res?.data || res?.reply || null
 
-        if (!msg) {
-            // Error එකක් වුනොත් typing status එක නතර කරන්න
+        // SAFE response extract
+        let msg =
+            res?.result ||
+            res?.response ||
+            res?.data ||
+            res?.reply ||
+            ''
+
+        if (typeof msg !== 'string' || !msg.trim()) {
             await conn.sendPresenceUpdate('paused', m.chat)
-            return
+            return reply('⚠️ Sands AI response empty. Try again.')
         }
 
-        // Final Cleaning
+        // clean branding
         let finalMsg = msg
             .replace(/OpenAI/gi, 'Sands AI')
-            .replace(/Grok/gi, 'Sands AI')
             .replace(/xAI/gi, 'Sandes Isuranda')
             .trim()
 
-        // Reply එක යැවීමට පෙර typing status එක නතර කරන්න
+        // send reply FIRST
+        await reply(finalMsg)
+
+        // stop typing
         await conn.sendPresenceUpdate('paused', m.chat)
-        
-        return reply(finalMsg)
 
     } catch (e) {
         console.log('[SANDS-AI ERROR]', e)
-        await conn.sendPresenceUpdate('paused', m.chat)
+        try {
+            await conn.sendPresenceUpdate('paused', m.chat)
+        } catch {}
     }
 })
