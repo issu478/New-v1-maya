@@ -2,52 +2,45 @@ const { cmd } = require('../command')
 const { fetchJson } = require('../lib/functions')
 
 const OWNER = "94716717099"
-let CHATBOT_STATUS = false // Bot එකේ තත්වය තබා ගැනීමට
+let CHATBOT_STATUS = false 
+global.AI_MODE = "normal" 
+let menuMsgId = "" // Menu එකේ ID එක save කරගන්න
 
-// --- AI පාලන මෙනුව (With Image) ---
+// --- 1. Menu එක සහ Image එක යවන Command එක ---
 cmd({
     pattern: "chatbot",
-    desc: "Manage AI chatbot status and modes",
+    desc: "AI Menu",
     category: "main",
     filename: __filename
 },
-async (conn, mek, m, { from, args, reply }) => {
-    // සෘජුවම On/Off කිරීමට (Example: .chatbot on)
-    if (args[0] === 'on') {
-        CHATBOT_STATUS = true
-        return reply("🤖 Sandes AI Chatbot is now *ENABLED* ✅")
-    }
-    if (args[0] === 'off') {
-        CHATBOT_STATUS = false
-        return reply("🤖 Sandes AI Chatbot is now *DISABLED* ❌")
-    }
-
-    // මෙනුව පෙන්වීම
-    const menuText = ` 
-*🤖 SANDES MD AI CONTROL PANEL*
+async (conn, mek, m, { from, reply }) => {
+    const menuImage = "https://upld.zone.id/uploads/d4i0x5iq/logo.webp"
+    const menuText = `
 ╭───────────────────────◆◆►
-┇Status: ${CHATBOT_STATUS ? "✅ *ACTIVE*" : "❌ *OFF*"}
-┇Current Mode: *${global.AI_MODE || "NORMAL"}*
-╰─────────────────────◆◆►
-📌 *Reply with a number:*
-1️⃣ *Girl AI Mode*
-2️⃣ *Normal AI Mode*
-3️⃣ *Kid AI Mode*
-4️⃣ *Turn OFF Chatbot*
-5️⃣ *Turn ON Chatbot*
-
-_Settings update instantly._
+┇*🤖 SANDES AI CONTROL PANEL*
+╰──────────────────────◆◆►
+╭──────────────────❖❖►
+┇ *Reply The Number bellow To change !* 🔥
+┇ 
+┇ 01 ❯❯● *Girl AI Mode*
+┇ 02 ❯❯● *Normal AI Mode*
+┇ 03 ❯❯● *Kid AI Mode*
+┇ 04 ❯❯● *Turn OFF Chatbot*
+┇ 05 ❯❯● *Turn ON Chatbot*
+╰───────────────────❖❖►
+*Reply Instantly*
 > Powered By Sandes Isuranda `
 
-    const imageUrl = 'https://upld.zone.id/uploads/d4i0x5iq/logo.webp' // ඔබේ image link එක මෙතනට දාන්න
-
-    return await conn.sendMessage(from, {
-        image: { url: imageUrl },
+    const sentMsg = await conn.sendMessage(from, {
+        image: { url: menuImage },
         caption: menuText
     }, { quoted: mek })
+
+    // Menu එකේ Message ID එක save කරගන්නවා රිප්ලයි එක චෙක් කරන්න
+    menuMsgId = sentMsg.key.id 
 })
 
-// --- ප්‍රධාන AI Logic එක ---
+// --- 2. Reply Handler සහ AI Logic එක ---
 cmd({
     on: "body"
 },
@@ -58,68 +51,64 @@ async (conn, mek, m, {
     reply
 }) => {
     try {
-        if (!body || m.fromMe) return
+        const text = body ? body.trim() : ""
+        const replyId = m.quoted ? m.quoted.id : null
 
-        // --- Menu එකට රිප්ලයි කිරීමේ Logic එක ---
-        if (m.quoted && m.quoted.caption && m.quoted.caption.includes("SANDES AI CONTROL PANEL")) {
-            if (body === '1') {
-                global.AI_MODE = "girl";
-                return reply("🌸 *Girl AI Mode Activated!*");
+        // 🧬 REACT & MODE SWITCH (ඔයා දුන්න විදියටම)
+        if (replyId === menuMsgId) {
+            await conn.sendMessage(m.chat, { react: { text: "🎀", key: m.key } })
+
+            if (text === "1" || text === "01") {
+                global.AI_MODE = "girl"
+                return reply("➔ *Girl AI Mode Activated!*")
             }
-            if (body === '2') {
-                global.AI_MODE = "normal";
-                return reply("🤖 *Normal AI Mode Activated!*");
+            if (text === "2" || text === "02") {
+                global.AI_MODE = "normal"
+                return reply("➔ *Normal AI Mode Activated!*")
             }
-            if (body === '3') {
-                global.AI_MODE = "kid";
-                return reply("👶 *Kid AI Mode Activated!*");
+            if (text === "3" || text === "03") {
+                global.AI_MODE = "kid"
+                return reply("➔ *Kid AI Mode Activated!*")
             }
-            if (body === '4') {
-                CHATBOT_STATUS = false;
-                return reply("❌ *Chatbot Turned OFF!*");
+            if (text === "4" || text === "04") {
+                CHATBOT_STATUS = false
+                return reply("❌ *Chatbot Disabled!*")
             }
-            if (body === '5') {
-                CHATBOT_STATUS = true;
-                return reply("✅ *Chatbot Turned ON!*");
+            if (text === "5" || text === "05") {
+                CHATBOT_STATUS = true
+                return reply("✅ *Chatbot Enabled!*")
             }
         }
 
-        // Bot off නම් හෝ Command එකක් නම් නතර කරන්න
-        if (!CHATBOT_STATUS || isCmd || /^[./!#]/.test(body)) return
+        // --- AI Response Logic ---
+        if (!CHATBOT_STATUS || isCmd || !body || m.fromMe || /^[./!#]/.test(body)) return
 
         await conn.sendPresenceUpdate('composing', m.chat)
 
         let promptBase = ""
-        let currentMode = global.AI_MODE || "normal"
-
-        if (currentMode === "girl") {
-            promptBase = "Act as a friendly, cheerful Sri Lankan girl. Use emojis. Speak in friendly Sinhala."
-        } else if (currentMode === "kid") {
-            promptBase = "Act as a very small innocent kid. Use cute Sinhala words."
+        if (global.AI_MODE === "girl") {
+            promptBase = "Act as a friendly, Cute Romantic  girl. Use emojis. Speak in Sinhala."
+        } else if (global.AI_MODE === "kid") {
+            promptBase = "Act as a cute small kid. Speak simple Sinhala."
         } else {
-            promptBase = "Act as Sandes AI, a helpful assistant created by Sandes Isuranda."
+            promptBase = "Your name is Sandes AI, created by Sandes Isuranda. Speak Sinhala."
         }
 
-        let systemPrompt = `${promptBase} Always reply in Sinhala. Question: ${body}`
+        let systemPrompt = `${promptBase} Question: ${body}`
         
         if (senderNumber === OWNER) {
-            systemPrompt = `Owner Sandes Isuranda is talking. Be extra respectful. Mode: ${currentMode}. Question: ${body}`
+            systemPrompt = `Owner Sandes Isuranda is talking. Respond with respect. Question: ${body}`
         }
 
-        let res = await fetchJson(
-            `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(systemPrompt)}`
-        )
-
+        let res = await fetchJson(`https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(systemPrompt)}`)
         let msg = res.message || res.result || res.response || res.data || null
 
         if (msg) {
             let finalMsg = msg.replace(/GPT|ChatGPT|OpenAI/gi, "Sandes AI")
-            await conn.sendPresenceUpdate('paused', m.chat)
             return await conn.sendMessage(m.chat, { text: finalMsg }, { quoted: mek })
         }
 
     } catch (e) {
         console.log('[AUTO-AI ERROR]', e)
-        await conn.sendPresenceUpdate('paused', m.chat)
     }
 })
