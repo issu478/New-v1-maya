@@ -51,19 +51,9 @@ cmd({ on: "body" }, async (conn, mek, m, {
         const cleanSender = senderNum.replace(/\D/g, '')
         const isOwner = cleanSender === OWNER_NUMBER
 
-        // system prompt
-        let systemPrompt =
-            "You are Sands AI, created by Sandes Isuranda. Reply naturally in Sinhala or English."
-
-        let ownerGreeting = isOwner
-            ? "The person is your creator Sandes. Be very friendly and respectful."
-            : ""
-
-        const finalQuery = `${systemPrompt}\n${ownerGreeting}\nUser: ${body}`
-
-        // API CALL
+        // 🔥 API CALL (USER MESSAGE ONLY)
         const apiUrl =
-            `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(finalQuery)}`
+            `https://lance-frank-asta.onrender.com/api/gpt?q=${encodeURIComponent(body)}`
 
         let res = await fetchJson(apiUrl)
 
@@ -83,10 +73,16 @@ cmd({ on: "body" }, async (conn, mek, m, {
         // clean branding
         let finalMsg = msg
             .replace(/OpenAI/gi, 'Sands AI')
+            .replace(/Grok/gi, 'Sands AI')
             .replace(/xAI/gi, 'Sandes Isuranda')
             .trim()
 
-        // send reply FIRST
+        // owner respect (NON-API LEVEL)
+        if (isOwner) {
+            finalMsg = `👨‍💻\n\n${finalMsg}`
+        }
+
+        // send reply
         await reply(finalMsg)
 
         // stop typing
